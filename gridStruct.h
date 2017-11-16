@@ -15,9 +15,15 @@ typedef struct Wall
 	WallDirection direction; //to use with WallDirection
 }Wall;
 
+typedef struct WallList
+{
+	Wall wall;
+	struct WallList *next;
+}WallList;
+
 typedef struct Slider
 {
-	Wall *walls;
+	WallList *walls;
 	uint nbWalls;
 }Slider;
 

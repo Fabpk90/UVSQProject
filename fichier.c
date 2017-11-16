@@ -31,50 +31,63 @@ void drawMap(int height, int width)
 		draw_line(p1, p2, c);
 	}
 	
-	Wall walls[1];
+	WallList *wall = malloc(sizeof(WallList));
 	
-	walls[0].position.x = 3;
-	walls[0].position.y = 3;
+	wall->wall.position.x = 3;
+	wall->wall.position.y = 3;
 	
-	walls[0].direction = 3;
+	wall->wall.direction = UP;
+	wall->next = NULL;
 	
-	drawWalls(walls, 1);
+	drawWalls(wall);
 	affiche_all();
 	affiche_auto_on();
+	
+	free(wall);
 }
 
-void drawWalls(Wall *walls, int size)
+void drawWalls(WallList *walls)
 {
 	POINT p1, p2;
 	int i;
 	COULEUR c;
 	
+	WallList *wallIterator = walls;
+	
 	c = couleur_RGB(255, 0, 0);
 	
-	for(i = 0; i <= size; i++)
+	while(wallIterator != NULL)
 	{
-		p1 = p2 = walls[i].position;
+		p1.x = p2.x = walls->wall.position.x * CONST_PIXELSCALE;
+		p1.y = p2.y = walls->wall.position.y * CONST_PIXELSCALE;
 		
-		switch(walls[i].direction)
+		switch(walls->wall.direction)
 		{
 			case DOWN:
-				
+				p1.x -= CONST_PIXELSCALE;
 			break;
 			
-			case LEFT:
-			
+			case LEFT:	
+				p2.y += CONST_PIXELSCALE;
 			break;
 			
 			case RIGHT:
-			
+				p2.x += CONST_PIXELSCALE;
+				p1.x = p2.x;
+				
+				p2.y += CONST_PIXELSCALE;
 			break;
 			
 			case UP:
-			
+				p2.y += CONST_PIXELSCALE;
+				p1.y = p2.y;
+				
+				p2.x += CONST_PIXELSCALE;
 			break;
 		}
 		
 		draw_line(p1, p2, c);
+		
+		wallIterator = wallIterator->next;
 	}
-	
 }

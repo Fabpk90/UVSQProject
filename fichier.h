@@ -4,6 +4,6 @@
 #include "gridStruct.h"
 
 void drawMap(int height, int width);
-void drawWalls(Wall* walls, int size);
+void drawWalls(WallList* walls);
 
 #endif
