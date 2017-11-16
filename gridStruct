@@ -1,0 +1,12 @@
+#idndef GRIDSTRUCT
+#define GRIDSTRUCT
+
+
+
+typedef struct Wall
+{
+	POINT position;
+	
+}Wall;
+
+#endif
