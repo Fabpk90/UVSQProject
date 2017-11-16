@@ -1,6 +1,6 @@
 #include <uvsqgraphics.h>
 
-#include "fichier.h"
+#include "renderer.h"
 
 int main () {
     init_graphics (800,600);

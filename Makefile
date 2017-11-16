@@ -3,15 +3,15 @@ all: run
 run: compile
 	./Slider
 
-compile: main.o fichier.o
-	gcc -o Slider main.o fichier.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
+compile: main.o renderer.o
+	gcc -o Slider main.o renderer.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
 	
 #ajouter les headers corrects
-main.o: main.c fichier.h
+main.o: main.c renderer.h
 	gcc -o main.o -c `sdl-config --cflags` main.c -W -Wall
 
-fichier.o: fichier.c fichier.h constants.h gridStruct.h
-	gcc -o fichier.o -c `sdl-config --cflags` fichier.c
+renderer.o: renderer.c renderer.h constants.h gridStruct.h
+	gcc -o renderer.o -c `sdl-config --cflags` renderer.c
 
 #NomDuFichier.o: NomDuFichier.c NomDuFichier.h
 #	gcc -o NomDuFichier.o -c `sdl-config --cflags` NomDuFichier.c
