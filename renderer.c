@@ -4,6 +4,24 @@
 
 #include "renderer.h"
 
+
+void drawGame(int height, int width)
+{
+	affiche_auto_off();	
+	
+	drawMap(height, width);
+	
+	POINT p1, p2;
+	
+	p1.x = p1.y = 3;
+	p2.x = p2.y = 5;
+	
+	drawPlayernGoal(p1,p2);
+	
+	affiche_all();
+	affiche_auto_on();
+}
+
 //draws the rows and the cols of the map
 //After drawing the basic grid, it call the function to draw walls
 void drawMap(int height, int width)
@@ -13,7 +31,7 @@ void drawMap(int height, int width)
 	int i;
 	COULEUR c;
 	c = couleur_RGB(0, 0, 0);
-	affiche_auto_off();	
+
 	p1.x = 0;
 	p2.x = width;
 	//draws rows
@@ -40,12 +58,13 @@ void drawMap(int height, int width)
 	wall->next = NULL;
 	
 	drawWalls(wall);
-	affiche_all();
-	affiche_auto_on();
+
 	
 	free(wall);
 }
 
+//draws walls according to their direction
+//cycle thru the list, stops when NULL
 void drawWalls(WallList *walls)
 {
 	POINT p1, p2;
@@ -85,9 +104,31 @@ void drawWalls(WallList *walls)
 				p2.x += CONST_PIXELSCALE;
 			break;
 		}
-		
 		draw_line(p1, p2, c);
-		
 		wallIterator = wallIterator->next;
 	}
+}
+
+void drawPlayernGoal(POINT player, POINT goal)
+{
+	COULEUR cPlayer, cGoal;
+	
+	cPlayer = couleur_RGB(0, 0, 255);
+	cGoal = couleur_RGB(0, 255, 0);
+	
+	player.x *= CONST_PIXELSCALE;
+	player.y *= CONST_PIXELSCALE;
+	
+	goal.x *= CONST_PIXELSCALE;
+	goal.y *= CONST_PIXELSCALE;
+	
+	player.x += CONST_PIXELSCALE / 2;
+	player.y += CONST_PIXELSCALE / 2;
+	
+	goal.x += CONST_PIXELSCALE / 2;
+	goal.y += CONST_PIXELSCALE / 2;
+	
+	draw_fill_circle(player, CONST_PIXELSCALE / 2, cPlayer);
+	draw_fill_circle(goal, CONST_PIXELSCALE / 2, cGoal);
+	
 }
