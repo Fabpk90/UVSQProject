@@ -3,10 +3,10 @@
 
 #include "gridStruct.h"
 
-void drawGame(int height, int width);
+void drawGame(Slider *slider);
 
-void drawMap(int height, int width);
-void drawWalls(WallList* walls);
+void drawMap(Slider *slider);
+void drawWalls(Wall * walls, uint nbWalls);
 
 void drawPlayernGoal(POINT player, POINT goal);
 

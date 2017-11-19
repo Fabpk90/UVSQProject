@@ -3,28 +3,25 @@
 
 typedef enum WallDirection
 {
-	UP = 0,
-	RIGHT = 3,
-	DOWN = 6,
-	LEFT = 9 
+	WALLUP = 0,
+	WALLRIGHT = 3,
+	WALLDOWN = 6,
+	WALLLEFT = 9 
 }WallDirection;
 
 typedef struct Wall
 {
 	POINT position;
-	WallDirection direction; //to use with WallDirection
+	WallDirection direction;
 }Wall;
-
-typedef struct WallList
-{
-	Wall wall;
-	struct WallList *next;
-}WallList;
 
 typedef struct Slider
 {
-	WallList *walls;
+	POINT resolution;
+	Wall *walls;
 	uint nbWalls;
+	POINT playerPos;
+	POINT goalPos;
 }Slider;
 
 #endif

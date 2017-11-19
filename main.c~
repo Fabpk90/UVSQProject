@@ -1,0 +1,14 @@
+#include <uvsqgraphics.h>
+
+#include "controller.h"
+
+int main () {
+    init_graphics (800,600);
+	fill_screen(blanc);	
+    
+    Play(600, 800);
+    
+// Attente de l'appui sur la touche Echap pour terminer
+    
+    exit(0);
+}

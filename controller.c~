@@ -1,0 +1,51 @@
+#include <uvsqgraphics.h>
+
+#include "controller.h"
+#include "renderer.h"
+#include "playerController.h"
+
+void Play(int height, int width)
+{
+	Slider *slider = initFromFile();
+	ArrowType inputArrow;
+	
+	do
+	{
+		
+		drawGame(height, width);
+		
+		inputArrow = getArrow(get_arrow());
+		
+		
+	}while(get_key() != 27);//escape
+}
+
+ArrowType getArrow(POINT arrowInput)
+{
+	if(arrowInput.x != 0)//left or right
+	{
+		if(arrowInput.x > 0)
+			return ARROWRIGHT;
+		else
+			return ARROWLEFT;
+	}
+	else
+	{
+		if(arrowInput.y > 0)
+			return ARROWUP;
+		else
+			return ARROWDOWN;
+	}
+}
+
+Slider* initFromFile()
+{
+	FILE* level = fopen("level1.slider", "r");
+	if(level != NULL)
+	{
+		
+		
+		
+		fclose(level);
+	}
+}

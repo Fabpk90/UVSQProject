@@ -1,14 +1,9 @@
 #include <uvsqgraphics.h>
 
-#include "renderer.h"
+#include "controller.h"
 
-int main () {
-    init_graphics (800,600);
-	fill_screen(blanc);	
-    
-    drawGame(600, 800);
-    
-// Attente de l'appui sur la touche Echap pour terminer
-    wait_escape();
-    exit(0);
+int main()
+{
+	Play("level0.slider");
+	exit(0);
 }
