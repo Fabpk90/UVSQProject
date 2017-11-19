@@ -41,28 +41,27 @@ Slider* initFromFile(const char* filename)
 {
 	FILE *level = fopen(filename, "r");
 	Slider *slider = malloc(sizeof(Slider));
-	uint nbWalls = 0, i;
+	uint i;
 	if (level != NULL) {
 		fscanf(level, "%d %d", &slider->resolution.x, &slider->resolution.y);
 		fscanf(level, "%d %d", &slider->playerPos.x, &slider->playerPos.y);
 		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
 		
-		fscanf(level, "%d", &nbWalls);
+		fscanf(level, "%d", &slider->nbWalls);
 		slider->walls = NULL;
-		if(nbWalls != 0)
+		if(slider->nbWalls != 0)
 		{
-			slider->walls = malloc(nbWalls * sizeof(Wall));
+			slider->walls = malloc(slider->nbWalls * sizeof(Wall));
 		
-			for(i = 0; i <= nbWalls; i++)
+			for(i = 0; i < slider->nbWalls; i++)
 			{
 				fscanf(level, "%d %d", &slider->walls[i].position.x, &slider->walls[i].position.y);
 			}
 		}
 		
-		
 		fclose(level);
 		return slider;
 	}
 	else
-	exit(-1);
+		exit(-1);
 }
