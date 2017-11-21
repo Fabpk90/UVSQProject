@@ -19,7 +19,7 @@ Play (const char *filename)
 
       inputArrow = getArrow (get_arrow ());
 
-      if (inputArrow != -1)
+      if (inputArrow != -1 && !slider->isMoving)
 	movePlayer (slider, inputArrow);
 
     }

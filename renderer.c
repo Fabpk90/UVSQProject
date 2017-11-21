@@ -3,6 +3,12 @@
 #include "constants.h"
 #include "renderer.h"
 
+void drawMap (Slider * slider);
+void drawWalls (Wall * walls, uint nbWalls);
+
+void drawPlayernGoal (POINT player, POINT goal);
+void updateWallFromDirection(POINT *p1, POINT *p2, WallDirection direction);
+
 void
 drawGame (Slider * slider)
 {
@@ -10,6 +16,7 @@ drawGame (Slider * slider)
   affiche_auto_off ();
 
   drawMap (slider);
+  drawWalls (slider->walls, slider->nbWalls);
   drawPlayernGoal (slider->playerPos, slider->goalPos);
 
   affiche_all ();
@@ -40,8 +47,6 @@ drawMap (Slider * slider)
       p1.x = p2.x = (i + 1) * 32;
       draw_line (p1, p2, noir);
     }
-
-  drawWalls (slider->walls, slider->nbWalls);
 }
 
 //draws walls according to their direction
@@ -60,32 +65,38 @@ drawWalls (Wall * walls, uint nbWalls)
       p1.x = p2.x = walls[i].position.x * CONST_PIXELSCALE;
       p1.y = p2.y = walls[i].position.y * CONST_PIXELSCALE;
 
-      switch (walls[i].direction)
+		updateWallFromDirection(&p1, &p2, walls[i].direction);
+      
+      draw_line (p1, p2, c);
+    }
+}
+
+void updateWallFromDirection(POINT *p1, POINT *p2, WallDirection direction)
+{
+	switch (direction)
 	{
 	case WALLDOWN:
-	  p1.x -= CONST_PIXELSCALE;
+	  p1->x -= CONST_PIXELSCALE;
 	  break;
 
 	case WALLLEFT:
-	  p2.y += CONST_PIXELSCALE;
+	  p2->y += CONST_PIXELSCALE;
 	  break;
 
 	case WALLRIGHT:
-	  p2.x += CONST_PIXELSCALE;
-	  p1.x = p2.x;
+	  p2->x += CONST_PIXELSCALE;
+	  p1->x = p2->x;
 
-	  p2.y += CONST_PIXELSCALE;
+	  p2->y += CONST_PIXELSCALE;
 	  break;
 
 	case WALLUP:
-	  p2.y += CONST_PIXELSCALE;
-	  p1.y = p2.y;
+	  p2->y += CONST_PIXELSCALE;
+	  p1->y = p2->y;
 
-	  p2.x += CONST_PIXELSCALE;
+	  p2->x += CONST_PIXELSCALE;
 	  break;
 	}
-      draw_line (p1, p2, c);
-    }
 }
 
 void
