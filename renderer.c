@@ -4,7 +4,7 @@
 #include "renderer.h"
 
 void
-drawGame (Slider * slider)
+drawGame (Slider *slider)
 {
 
   affiche_auto_off ();

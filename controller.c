@@ -24,6 +24,9 @@ Play (const char *filename)
 
     }
   while (get_key () != 27);	//escape
+  
+  free(slider->walls);
+  free(slider);
 }
 
 ArrowType

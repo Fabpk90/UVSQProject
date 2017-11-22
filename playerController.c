@@ -18,8 +18,6 @@ movePlayer (Slider * slider, ArrowType arrowDirection)
   move (slider, wall, arrowDirection);
 
   affiche_all ();
-
-
   return result;
 }
 
