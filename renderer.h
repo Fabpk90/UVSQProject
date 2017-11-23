@@ -3,6 +3,6 @@
 
 #include "gridStruct.h"
 
-void drawGame (Slider * slider);
+void drawGame(Slider * slider);
 
 #endif

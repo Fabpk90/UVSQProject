@@ -3,123 +3,117 @@
 #include "constants.h"
 #include "renderer.h"
 
-void drawMap (Slider * slider);
-void drawWalls (Wall * walls, uint nbWalls);
+void drawMap(Slider * slider);
+void drawWalls(Wall * walls, uint nbWalls);
 
-void drawPlayernGoal (POINT player, POINT goal);
-void updateWallFromDirection(POINT *p1, POINT *p2, WallDirection direction);
+void drawPlayernGoal(POINT player, POINT goal);
+void updateWallFromDirection(POINT * p1, POINT * p2,
+			     WallDirection direction);
 
-void
-drawGame (Slider * slider)
+void drawGame(Slider * slider)
 {
 
-  affiche_auto_off ();
+    affiche_auto_off();
 
-  drawMap (slider);
-  drawWalls (slider->walls, slider->nbWalls);
-  drawPlayernGoal (slider->playerPos, slider->goalPos);
+    drawMap(slider);
+    drawWalls(slider->walls, slider->nbWalls);
+    drawPlayernGoal(slider->playerPos, slider->goalPos);
 
-  affiche_all ();
+    affiche_all();
 }
 
 //draws the rows and the cols of the map
 //After drawing the basic grid, it call the function to draw walls
-void
-drawMap (Slider * slider)
+void drawMap(Slider * slider)
 {
-  //used do draw the line of the map
-  POINT p1, p2;
-  int i;
+    //used do draw the line of the map
+    POINT p1, p2;
+    int i;
 
-  p1.x = 0;
-  p2.x = slider->resolution.x;
-  //draws rows
-  for (i = 0; i <= slider->resolution.y / CONST_PIXELSCALE; i++)
-    {
-      p1.y = p2.y = (i + 1) * 32;
-      draw_line (p1, p2, noir);
+    p1.x = 0;
+    p2.x = slider->resolution.x;
+    //draws rows
+    for (i = 0; i <= slider->resolution.y / CONST_PIXELSCALE; i++) {
+	p1.y = p2.y = (i + 1) * 32;
+	draw_line(p1, p2, noir);
     }
-  p1.y = 0;
-  p2.y = slider->resolution.y;
-  //draws cols
-  for (i = 0; i <= slider->resolution.x / CONST_PIXELSCALE; i++)
-    {
-      p1.x = p2.x = (i + 1) * 32;
-      draw_line (p1, p2, noir);
+    p1.y = 0;
+    p2.y = slider->resolution.y;
+    //draws cols
+    for (i = 0; i <= slider->resolution.x / CONST_PIXELSCALE; i++) {
+	p1.x = p2.x = (i + 1) * 32;
+	draw_line(p1, p2, noir);
     }
 }
 
 //draws walls according to their direction
 //cycle thru the list, stops when NULL
-void
-drawWalls (Wall * walls, uint nbWalls)
+void drawWalls(Wall * walls, uint nbWalls)
 {
-  POINT p1, p2;
-  int i;
-  COULEUR c;
+    POINT p1, p2;
+    int i;
+    COULEUR c;
 
-  c = couleur_RGB (255, 0, 0);
+    c = couleur_RGB(255, 0, 0);
 
-  for (i = 0; i < nbWalls; i++)
-    {
-      p1.x = p2.x = walls[i].position.x * CONST_PIXELSCALE;
-      p1.y = p2.y = walls[i].position.y * CONST_PIXELSCALE;
+    for (i = 0; i < nbWalls; i++) {
+	p1.x = p2.x = walls[i].position.x * CONST_PIXELSCALE;
+	p1.y = p2.y = walls[i].position.y * CONST_PIXELSCALE;
 
-		updateWallFromDirection(&p1, &p2, walls[i].direction);
-      
-      draw_line (p1, p2, c);
+	updateWallFromDirection(&p1, &p2, walls[i].direction);
+
+	draw_line(p1, p2, c);
     }
 }
 
-void updateWallFromDirection(POINT *p1, POINT *p2, WallDirection direction)
+void updateWallFromDirection(POINT * p1, POINT * p2,
+			     WallDirection direction)
 {
-	switch (direction)
-	{
-	case WALLDOWN:
-	  p1->x -= CONST_PIXELSCALE;
-	  break;
+    switch (direction) {
+    case WALLDOWN:
+	p1->x -= CONST_PIXELSCALE;
+	break;
 
-	case WALLLEFT:
-	  p2->y += CONST_PIXELSCALE;
-	  break;
+    case WALLLEFT:
+	p2->y += CONST_PIXELSCALE;
+	break;
 
-	case WALLRIGHT:
-	  p2->x += CONST_PIXELSCALE;
-	  p1->x = p2->x;
+    case WALLRIGHT:
+	p2->x += CONST_PIXELSCALE;
+	p1->x = p2->x;
 
-	  p2->y += CONST_PIXELSCALE;
-	  break;
+	p2->y += CONST_PIXELSCALE;
+	break;
 
-	case WALLUP:
-	  p2->y += CONST_PIXELSCALE;
-	  p1->y = p2->y;
+    case WALLUP:
+	p2->y += CONST_PIXELSCALE;
+	p1->y = p2->y;
 
-	  p2->x += CONST_PIXELSCALE;
-	  break;
-	}
+	p2->x += CONST_PIXELSCALE;
+	break;
+    }
 }
 
-void
-drawPlayernGoal (POINT player, POINT goal)
+void drawPlayernGoal(POINT player, POINT goal)
 {
-  COULEUR cPlayer, cGoal;
+    COULEUR cPlayer, cGoal;
 
-  cPlayer = couleur_RGB (0, 0, 255);
-  cGoal = couleur_RGB (0, 255, 0);
+    cPlayer = couleur_RGB(0, 0, 255);
+    cGoal = couleur_RGB(0, 255, 0);
 
-  player.x *= CONST_PIXELSCALE;
-  player.y *= CONST_PIXELSCALE;
+    player.x *= CONST_PIXELSCALE;
+    player.y *= CONST_PIXELSCALE;
 
-  goal.x *= CONST_PIXELSCALE;
-  goal.y *= CONST_PIXELSCALE;
+    goal.x *= CONST_PIXELSCALE;
+    goal.y *= CONST_PIXELSCALE;
 
-  player.x += CONST_PIXELSCALE / 2;
-  player.y += CONST_PIXELSCALE / 2;
+    player.x += CONST_PIXELSCALE / 2;
+    player.y += CONST_PIXELSCALE / 2;
 
-  goal.x += CONST_PIXELSCALE / 2;
-  goal.y += CONST_PIXELSCALE / 2;
+    goal.x += CONST_PIXELSCALE / 2;
+    goal.y += CONST_PIXELSCALE / 2;
 
-  draw_fill_circle (player, CONST_PIXELSCALE / 2, cPlayer);
-  draw_fill_circle (goal, CONST_PIXELSCALE / 2, cGoal);
+    draw_fill_circle(player, CONST_PIXELSCALE / 2, cPlayer);
+    draw_fill_circle(goal, CONST_PIXELSCALE / 2, cGoal);
 
 }

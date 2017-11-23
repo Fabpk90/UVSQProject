@@ -1,83 +1,77 @@
-#include <uvsqgraphics.h>
+#include "uvsqgraphics.h"
 
 #include "gridStruct.h"
 #include "constants.h"
 #include "playerController.h"
 #include "vectorUtil.h"
 
-//mouvement, checker les murs dans la même direction
-//checker le plus proche et compter les pas
-//animation des pas
+// mouvement, checker les murs dans la même direction
+// checker le plus proche et compter les pas
+// animation des pas
 
-Wall *getBlockingBlock (Slider * slider, ArrowType direction);
-uint8_t checkIfGoal (Slider * slider);
+void move(Slider * slider, Wall * wall, POINT direction);
+ArrowType getArrow(POINT arrowInput);
 
-void checkWall (Wall * nearestWall, Slider * slider, Wall * wall,
-		ArrowType direction);
-void move (Slider * slider, Wall * wall, ArrowType direction);
+// pas de récursif ici, la mémoire serait gachée
+// iteratif, moche, mais niveau mémoire c'est mieux
 
-//pas de récursif ici, la mémoire serait gachée
-//iteratif, moche, mais niveau mémoire c'est mieux
-
-int8_t
-movePlayer (Slider * slider, ArrowType arrowDirection)
+int8_t movePlayer(Slider * slider, POINT direction)
 {
-  int8_t result = -1;
-  Wall *wall;
+	int8_t result = -1;
+	Wall *wall = NULL;
+	
+	//printf("direction: %d %d\n", direction.x, direction.y);
+	
+	if(direction.x != 0 || direction.y != 0)
+	{
 
-  wall = getBlockingBlock (slider, arrowDirection);
-  move (slider, wall, arrowDirection);
+		//wall = getBlockingBlock(slider, arrowDirection);
+		move(slider, wall, direction);
 
-  affiche_all ();
+		affiche_all();
+	}
+	
 
-	slider->isMoving = 1;
 
-  return result;
+	return result;
 }
 
-//cycle thru walls, and see if there is any on the path
-//find the nearest blocking block, and goes to it
-Wall *
-getBlockingBlock (Slider * slider, ArrowType direction)
+// TODO: animation
+// move step by step and stops when cannot move
+void move(Slider * slider, Wall * wall, POINT direction)
 {
-	uint i;
-	for(i = 0; i < slider->nbWalls; i++)
-	{
+	POINT p; p=slider->playerPos;
+	addVec(p, direction);
 	
+	printf("%d %d", p.x, p.y);
+	
+	if(p.x >= 0 && p.x < (slider->resolution.x / CONST_PIXELSCALE) 
+	&& p.y >= 0 && p.y <= (slider->resolution.y / CONST_PIXELSCALE) )
+	slider->playerPos = p;
+	
+	
+	if (wall != NULL) {
+
+	} else			// go to the end of the screen
+	{
+
 	}
 }
 
-void
-checkWall (Wall * nearestWall, Slider * slider, Wall * wall,
-	   ArrowType direction)
+
+ArrowType getArrow(POINT arrowInput)
 {
-  //check if the block is on the way, according to the direction
-  /*switch (direction) {
-     case ARROWDOWN:
-     if (list->wall.position.x == slider->playerPos.x
-     && list->wall.position.y - slider->playerPos.y > 0) {
-     if (nearestWall != NULL) {
-     if (nearestWall->position.y <
-     list->wall.position.y)
-     nearestWall = &list->wall;
-     } else
-     nearestWall = &list->wall;
-     }
-     break;
-     } */
-}
-
-//TODO: animation
-//move step by step and stops when cannot move
-void
-move (Slider * slider, Wall * wall, ArrowType direction)
-{
-
-  slider->playerPos.x += 1;
-  /*if (wall != NULL) {
-
-     } else                       // go to the end of the screen
-     {
-
-     } */
+    if (arrowInput.x != 0)	//left or right
+    {
+	if (arrowInput.x > 0)
+	    return ARROWRIGHT;
+	else
+	    return ARROWLEFT;
+    } else if (arrowInput.y != 0) {
+	if (arrowInput.y > 0)
+	    return ARROWUP;
+	else
+	    return ARROWDOWN;
+    } else
+	return NONE;
 }
