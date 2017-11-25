@@ -13,11 +13,20 @@ typedef struct Wall {
     WallDirection direction;
 } Wall;
 
+typedef struct Player
+{
+	POINT position;
+	
+	//used for knowing if it has reached his destination
+	//if null, no destination
+	Wall *wall; 
+}Player;
+
 typedef struct Slider {
     POINT resolution;
     Wall *walls;
     uint nbWalls;
-    POINT playerPos;
+    Player player;
     POINT goalPos;
     int8_t isMoving;
 } Slider;

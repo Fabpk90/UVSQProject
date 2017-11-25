@@ -17,7 +17,7 @@ void drawGame(Slider * slider)
 
     drawMap(slider);
     drawWalls(slider->walls, slider->nbWalls);
-    drawPlayernGoal(slider->playerPos, slider->goalPos);
+    drawPlayernGoal(slider->player.position, slider->goalPos);
 
     affiche_all();
 }

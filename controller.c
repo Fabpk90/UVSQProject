@@ -30,7 +30,7 @@ Slider *initFromFile(const char *filename)
     {
 		fscanf(level, "%d %d", &slider->resolution.x,
 			   &slider->resolution.y);
-		fscanf(level, "%d %d", &slider->playerPos.x, &slider->playerPos.y);
+		fscanf(level, "%d %d", &slider->player.position.x, &slider->player.position.y);
 		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
 
 		fscanf(level, "%d", &slider->nbWalls);

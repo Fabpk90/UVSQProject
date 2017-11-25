@@ -51,7 +51,7 @@ typedef struct point {
 typedef Uint32 COULEUR;
 
 	// Les booléens
-typedef int BOOL;
+typedef uint8_t BOOL;
 
 	// 1.2 VARIABLES
 	// Taille de l'affichage
