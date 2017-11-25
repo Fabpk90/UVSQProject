@@ -8,7 +8,7 @@ void Play(const char* filename)
 {
 	Slider *slider = initFromFile(filename);
 	ArrowType inputArrow;
-	
+
 	init_graphics(slider->resolution.x, slider->resolution.y);
 	fill_screen(blanc);
 
@@ -46,20 +46,22 @@ Slider* initFromFile(const char* filename)
 		fscanf(level, "%d %d", &slider->resolution.x, &slider->resolution.y);
 		fscanf(level, "%d %d", &slider->playerPos.x, &slider->playerPos.y);
 		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
+
 		
+
 		fscanf(level, "%d", &nbWalls);
 		slider->walls = NULL;
 		if(nbWalls != 0)
 		{
 			slider->walls = malloc(nbWalls * sizeof(Wall));
-		
+
 			for(i = 0; i <= nbWalls; i++)
 			{
 				fscanf(level, "%d %d", &slider->walls[i].position.x, &slider->walls[i].position.y);
 			}
 		}
-		
-		
+
+
 		fclose(level);
 		return slider;
 	}
