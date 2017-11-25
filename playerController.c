@@ -5,6 +5,17 @@
 #include "playerController.h"
 #include "vectorUtil.h"
 
+//mouvement, checker les murs dans la même direction
+//checker le plus proche et compter les pas
+//animation des pas
+
+Wall *getBlockingBlock (Slider * slider, ArrowType direction);
+uint8_t checkIfGoal (Slider * slider);
+
+void checkWall (Wall * nearestWall, Slider * slider, Wall * wall,
+		ArrowType direction);
+void move (Slider * slider, Wall * wall, ArrowType direction);
+
 //pas de récursif ici, la mémoire serait gachée
 //iteratif, moche, mais niveau mémoire c'est mieux
 
@@ -18,6 +29,7 @@ movePlayer (Slider * slider, ArrowType arrowDirection)
   move (slider, wall, arrowDirection);
 
   affiche_all ();
+  slider->isMoving = 1;
   return result;
 }
 
@@ -26,7 +38,11 @@ movePlayer (Slider * slider, ArrowType arrowDirection)
 Wall *
 getBlockingBlock (Slider * slider, ArrowType direction)
 {
-
+	uint i;
+	for(i = 0; i < slider->nbWalls; i++)
+	{
+	
+	}
 }
 
 void
