@@ -31,25 +31,28 @@ Slider *initFromFile(const char *filename)
     uint i;
     if (level != NULL) 
     {
+		slider->isMoving = 0;
+		slider->player.wall = NULL;
+		slider->walls = NULL;
+		
 		fscanf(level, "%d %d", &slider->resolution.x,
 			   &slider->resolution.y);
 		fscanf(level, "%d %d", &slider->player.position.x, &slider->player.position.y);
 		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
 
 		fscanf(level, "%d", &slider->nbWalls);
-		slider->walls = NULL;
 		if (slider->nbWalls != 0) {
 			slider->walls = malloc(slider->nbWalls * sizeof(Wall));
 
 			for (i = 0; i < slider->nbWalls; i++) {
-			fscanf(level, "%d %d", &slider->walls[i].position.x,
-				   &slider->walls[i].position.y);
+			fscanf(level, "%d %d %d", &slider->walls[i].position.x,
+				   &slider->walls[i].position.y,  &slider->walls[i].direction);
 			}
 		}
 
 		fclose(level);
 		return slider;
     } 
-    else
+    free(slider);
 	exit(-1);
 }

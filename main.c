@@ -2,9 +2,8 @@
 
 #include "controller.h"
 
-int
-main ()
+int main()
 {
-  Play ("level0.slider");
-  exit (0);
+    Play("level0.slider");
+    exit(0);
 }

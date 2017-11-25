@@ -20,16 +20,15 @@ int8_t movePlayer(Slider * slider, POINT direction)
 {
 	int8_t result = -1;
 	
-	//printf("direction: %d %d\n", direction.x, direction.y);
+	
 	
 	if(direction.x != 0 || direction.y != 0)
 	{
 		//if no destination and the player is trying to move
 		//we need to search for an obstacle
-		if(slider->player.wall == NULL)
-			slider->player.wall = searchForObstacle(slider, direction);
-
-		move(slider, slider->player.wall, direction);
+		slider->player.wall = searchForObstacle(slider, direction);
+		
+		move(slider, direction);
 		//wall = getBlockingBlock(slider, arrowDirection);
 		
 
@@ -44,30 +43,35 @@ BOOL isWallOnPath(POINT playerPos, Wall *wall, POINT direction)
 	if(direction.x > 0)//right
 	{
 		if(wall->position.y == playerPos.y 
-		&& wall->position.x > playerPos.x
+		&& wall->position.x >= playerPos.x
 		&& (wall->direction ==  WALLRIGHT || wall->direction == WALLLEFT) )
 			return true;
 	}
 	else if (direction.x < 0) //left
 	{
 		if(wall->position.y == playerPos.y 
-		&& wall->position.x < playerPos.x
+		&& wall->position.x <= playerPos.x
 		&& (wall->direction == WALLRIGHT || wall->direction == WALLLEFT) )
 			return true;
 	}
 	else if(direction.y > 0)//up
 	{
 		if(wall->position.x == playerPos.x 
-		&& wall->position.y > playerPos.y
+		&& wall->position.y >= playerPos.y
 		&& (wall->direction == WALLUP || wall->direction == WALLDOWN) )
 			return true;
 	}
 	else if (direction.y < 0)//down
 	{
+		
+		
 		if(wall->position.x == playerPos.x 
-		&& wall->position.y < playerPos.y
+		&& wall->position.y <= playerPos.y
 		&& (wall->direction == WALLUP || wall->direction == WALLDOWN) )
+		{
 			return true;
+		}
+			
 	}
 	
 	return false;
@@ -76,19 +80,23 @@ BOOL isWallOnPath(POINT playerPos, Wall *wall, POINT direction)
 Wall* searchForObstacle(Slider *slider, POINT direction)
 {
 	uint i;
-	float distMin = -1, dist = -2;
+	float distMin = slider->resolution.y, dist = -1;
 	Wall *wall = NULL;
 	
 	for(i = 0; i < slider->nbWalls; i++)
 	{
 		//check if the wall is in the way
-		if(isWallOnPath(slider->player.position, slider->walls[i], direction) == true)
-			dist = distance(slider->player.position, slider->walls[i].position);
-		
-		if(dist < distMin || distMin == -1)
+		if(isWallOnPath(slider->player.position, &slider->walls[i], direction) == true)
 		{
-			distMin = dist;
-			wall = &slider->walls[i];
+			dist = distance(slider->player.position, slider->walls[i].position);
+			
+			//printf("dist : %f\ndistMin: %f", dist, distMin);
+		
+			if(dist < distMin)
+			{
+				distMin = dist;
+				wall = &slider->walls[i];
+			}
 		}
 			
 	}
@@ -103,7 +111,8 @@ void move(Slider * slider, POINT direction)
 	POINT p;
 	if (slider->player.wall != NULL) 
 	{
-
+	printf("pos wall: %d %d,  %d\n", slider->player.wall->position.x, slider->player.wall->position.y, slider->player.wall->direction);
+	slider->player.position = slider->player.wall->position;
 	} 
 	else			// go to the end of the screen
 	{
