@@ -3,9 +3,9 @@
 
 typedef enum WallDirection {
     WALLUP = 0,
-    WALLRIGHT = 3,
-    WALLDOWN = 6,
-    WALLLEFT = 9
+    WALLRIGHT = 1,
+    WALLDOWN = 2,
+    WALLLEFT = 3
 } WallDirection;
 
 typedef struct Wall {
@@ -16,10 +16,10 @@ typedef struct Wall {
 typedef struct Player
 {
 	POINT position;
-	
+
 	//used for knowing if it has reached his destination
 	//if null, no destination
-	Wall *wall; 
+	Wall *wall;
 }Player;
 
 typedef struct Slider {

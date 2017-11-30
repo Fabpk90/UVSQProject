@@ -1,9 +1,18 @@
 #include <uvsqgraphics.h>
 
-#include "controller.h"
+#include "Controller/controller.h"
 
-int main()
+int main(int argc, char **argv)
 {
-    Play("level0.slider");
-    exit(0);
+
+	if(argc  >  1)
+	{
+			if(argc == 2)
+		    Play(argv[1]);
+	}
+	else
+	{
+		printf("Nombres d'arguments invalide");
+		exit(ERROR_ARGUMENTS);
+	}
 }

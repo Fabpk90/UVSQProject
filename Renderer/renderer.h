@@ -1,7 +1,7 @@
 #ifndef FICHIER
 #define FICHIER
 
-#include "gridStruct.h"
+#include "../Util/gridStruct.h"
 
 void drawGame(Slider * slider);
 

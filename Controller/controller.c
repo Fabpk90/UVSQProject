@@ -1,8 +1,8 @@
 #include <uvsqgraphics.h>
 
 #include "controller.h"
-#include "renderer.h"
-#include "playerController.h"
+#include "../Renderer/renderer.h"
+#include "../Controller/playerController.h"
 
 void Play(const char *filename)
 {
@@ -19,7 +19,7 @@ void Play(const char *filename)
 
     }
     while (get_key() != 27);	//escape
-  
+
   free(slider->walls);
   free(slider);
 }
@@ -29,14 +29,17 @@ Slider *initFromFile(const char *filename)
     FILE *level = fopen(filename, "r");
     Slider *slider = malloc(sizeof(Slider));
     uint i;
-    if (level != NULL) 
+    if (level != NULL)
     {
 		slider->isMoving = 0;
 		slider->player.wall = NULL;
 		slider->walls = NULL;
-		
+
 		fscanf(level, "%d %d", &slider->resolution.x,
 			   &slider->resolution.y);
+		slider->resolution.x *= CONST_PIXELSCALE;
+		slider->resolution.y *= CONST_PIXELSCALE;
+
 		fscanf(level, "%d %d", &slider->player.position.x, &slider->player.position.y);
 		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
 
@@ -47,12 +50,14 @@ Slider *initFromFile(const char *filename)
 			for (i = 0; i < slider->nbWalls; i++) {
 			fscanf(level, "%d %d %d", &slider->walls[i].position.x,
 				   &slider->walls[i].position.y,  &slider->walls[i].direction);
+
+          slider->walls[i].direction /= 3;
 			}
 		}
 
 		fclose(level);
 		return slider;
-    } 
+    }
     free(slider);
 	exit(-1);
 }

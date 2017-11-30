@@ -1,9 +1,11 @@
+#include <stdlib.h>
 #include "uvsqgraphics.h"
 
-#include "gridStruct.h"
-#include "constants.h"
+#include "../Util/gridStruct.h"
+#include "../Util/constants.h"
 #include "playerController.h"
-#include "vectorUtil.h"
+#include "../Util/vectorUtil.h"
+
 
 // mouvement, checker les murs dans la même direction
 // checker le plus proche et compter les pas
@@ -11,7 +13,10 @@
 
 ArrowType getArrow(POINT arrowInput);
 Wall* searchForObstacle(Slider *slider, POINT direction);
-void move(Slider * slider, POINT direction);
+void move(Slider * slider, POINT position);
+
+POINT getCorrectPosition(Wall *wall, POINT direction);
+POINT getCornerScreen(POINT direction, Slider *slider);
 
 // pas de récursif ici, la mémoire serait gachée
 // iteratif, moche, mais niveau mémoire c'est mieux
@@ -19,119 +24,190 @@ void move(Slider * slider, POINT direction);
 int8_t movePlayer(Slider * slider, POINT direction)
 {
 	int8_t result = -1;
-	
-	
-	
+	Wall *wall = NULL;
+
+	POINT cornerPos;
+	cornerPos.x = cornerPos.y = 1;
+
 	if(direction.x != 0 || direction.y != 0)
 	{
+		//normalisation
+		direction.x /= direction.x == 0 ? 1 : abs(direction.x);
+		direction.y /= direction.y == 0 ? 1 : abs(direction.y);
+
 		//if no destination and the player is trying to move
 		//we need to search for an obstacle
-		slider->player.wall = searchForObstacle(slider, direction);
-		
-		move(slider, direction);
+		wall = searchForObstacle(slider, direction);
+
+		if(wall != NULL)
+		{
+			cornerPos = getCorrectPosition(wall, direction);
+			printf("mur\n");
+		}
+		else
+		{
+			//if there is no wall, the player need to go to a corner of the screen
+			cornerPos = getCornerScreen(direction, slider);
+			addVec(cornerPos, slider->player.position);
+		}
+
+		move(slider, cornerPos);
 		//wall = getBlockingBlock(slider, arrowDirection);
-		
+
 
 		affiche_all();
 	}
-	
+
 	return result;
 }
 
+//returns a Vec2 of the cornerPos according to the direction
+POINT getCornerScreen(POINT direction, Slider *slider)
+{
+	POINT p;
+
+p.x = p.y = 0;
+
+	if(direction.x < 0) // left
+	{
+		p.x = -slider->player.position.x * CONST_PIXELSCALE;
+		p.y = 0;
+	}
+	else if (direction.x > 0)
+	{
+//printf("droite\n");
+
+		p.x = ( (slider->resolution.x -1) - slider->player.position.x * CONST_PIXELSCALE);
+		p.y = 0;
+	}
+	else if(direction.y < 0) // down
+	{
+		p.x = 0;
+		p.y = -slider->player.position.y * CONST_PIXELSCALE;
+
+		printf("y = %d", slider->resolution.y);
+	}
+	else if(direction.y > 0)
+	{
+		//printf("haut\n");
+		p.x = 0;
+		p.y = ((slider->resolution.y - 1) - slider->player.position.y * CONST_PIXELSCALE);
+	}
+
+	p.x /= CONST_PIXELSCALE;
+	p.y /= CONST_PIXELSCALE;
+
+	return p;
+}
+
+//returns the correct position of the player colliding on a wall
+//needed for the ambigous placements, 0 1 9, 1 1 3, which seems the same but aren't
+POINT getCorrectPosition(Wall *wall, POINT direction)
+{
+	POINT position;
+	position = wall->position;
+
+	//the direction is on the opposite direction so-> it need to go at the n-1 position
+	if( ((wall->direction + 2) % 4) == getArrow(direction) )
+	{
+		direction.x = -direction.x;
+		direction.y = -direction.y;
+		addVec(position, direction);
+	}
+	return position;
+}
+
+//check wether the block ahead is blocking the path
+//according to the direction
 BOOL isWallOnPath(POINT playerPos, Wall *wall, POINT direction)
 {
+
+//the block is on the same position
+//we check wether the player is blocked
+	if(cmpVec(playerPos, wall->position))
+	{
+		if((int) getArrow(direction) == wall->direction)
+			return true;
+		else
+			return false;
+	}
+
 	if(direction.x > 0)//right
 	{
-		if(wall->position.y == playerPos.y 
+		if(wall->position.y == playerPos.y
 		&& wall->position.x >= playerPos.x
 		&& (wall->direction ==  WALLRIGHT || wall->direction == WALLLEFT) )
 			return true;
 	}
 	else if (direction.x < 0) //left
 	{
-		if(wall->position.y == playerPos.y 
+		if(wall->position.y == playerPos.y
 		&& wall->position.x <= playerPos.x
 		&& (wall->direction == WALLRIGHT || wall->direction == WALLLEFT) )
 			return true;
 	}
 	else if(direction.y > 0)//up
 	{
-		if(wall->position.x == playerPos.x 
+		if(wall->position.x == playerPos.x
 		&& wall->position.y >= playerPos.y
 		&& (wall->direction == WALLUP || wall->direction == WALLDOWN) )
 			return true;
 	}
 	else if (direction.y < 0)//down
 	{
-		
-		
-		if(wall->position.x == playerPos.x 
+		if(wall->position.x == playerPos.x
 		&& wall->position.y <= playerPos.y
 		&& (wall->direction == WALLUP || wall->direction == WALLDOWN) )
 		{
 			return true;
 		}
-			
+
 	}
-	
+
 	return false;
 }
 
+
+//Returns a pointer to the nearest Obstacle, null if none
 Wall* searchForObstacle(Slider *slider, POINT direction)
 {
 	uint i;
 	float distMin = slider->resolution.y, dist = -1;
 	Wall *wall = NULL;
-	
+
 	for(i = 0; i < slider->nbWalls; i++)
 	{
-		//check if the wall is in the way
+		//check if the wall is on the way
 		if(isWallOnPath(slider->player.position, &slider->walls[i], direction) == true)
 		{
 			dist = distance(slider->player.position, slider->walls[i].position);
-			
-			//printf("dist : %f\ndistMin: %f", dist, distMin);
-		
+
 			if(dist < distMin)
 			{
 				distMin = dist;
 				wall = &slider->walls[i];
 			}
 		}
-			
+
 	}
-	
+
 	return wall;
 }
 
 // TODO: animation
 // move step by step and stops when cannot move
-void move(Slider * slider, POINT direction)
+void move(Slider * slider, POINT position)
 {
-	POINT p;
-	if (slider->player.wall != NULL) 
-	{
-	printf("pos wall: %d %d,  %d\n", slider->player.wall->position.x, slider->player.wall->position.y, slider->player.wall->direction);
-	slider->player.position = slider->player.wall->position;
-	} 
-	else			// go to the end of the screen
-	{
-		p=slider->player.position;
-		addVec(p, direction);
-		
+
 		//test if the animation doesn't exceeds the screen
-		if(p.x >= 0 && p.x < (slider->resolution.x / CONST_PIXELSCALE) 
-		&& p.y >= 0 && p.y <= (slider->resolution.y / CONST_PIXELSCALE) )
+		if(position.x >= 0 && position.x <= (slider->resolution.x / CONST_PIXELSCALE)
+		&& position.y >= 0 && position.y <= (slider->resolution.y / CONST_PIXELSCALE) )
 		{
-			slider->player.position = p;
+			slider->player.position = position;
 		}
-	}
-	
-	 
-	
 }
 
-
+//Returns a arrowType according to the input
 ArrowType getArrow(POINT arrowInput)
 {
     if (arrowInput.x != 0)	//left or right

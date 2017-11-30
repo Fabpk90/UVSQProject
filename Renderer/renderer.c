@@ -1,12 +1,12 @@
 #include <uvsqgraphics.h>
 
-#include "constants.h"
+#include "../Util/constants.h"
 #include "renderer.h"
 
 void drawMap(Slider * slider);
 void drawWalls(Wall * walls, uint nbWalls);
 
-void drawPlayernGoal(POINT player, POINT goal);
+void drawCircle(POINT position, COULEUR color, int radius);
 void updateWallFromDirection(POINT * p1, POINT * p2,
 			     WallDirection direction);
 
@@ -17,7 +17,10 @@ void drawGame(Slider * slider)
 
     drawMap(slider);
     drawWalls(slider->walls, slider->nbWalls);
-    drawPlayernGoal(slider->player.position, slider->goalPos);
+
+		drawCircle(slider->goalPos, COLOR_GOAL, CONST_PIXELSCALE / 2);
+    drawCircle(slider->player.position, COLOR_PLAYER, CONST_PIXELSCALE / 2);
+
 
     affiche_all();
 }
@@ -94,26 +97,16 @@ void updateWallFromDirection(POINT * p1, POINT * p2,
     }
 }
 
-void drawPlayernGoal(POINT player, POINT goal)
+void drawCircle(POINT position, COULEUR color, int radius)
 {
-    COULEUR cPlayer, cGoal;
+	//translate the position
+	position.x *= CONST_PIXELSCALE;
+	position.y *= CONST_PIXELSCALE;
 
-    cPlayer = couleur_RGB(0, 0, 255);
-    cGoal = couleur_RGB(0, 255, 0);
+	//center of the case
+	position.x += CONST_PIXELSCALE / 2;
+	position.y += CONST_PIXELSCALE / 2;
 
-    player.x *= CONST_PIXELSCALE;
-    player.y *= CONST_PIXELSCALE;
-
-    goal.x *= CONST_PIXELSCALE;
-    goal.y *= CONST_PIXELSCALE;
-
-    player.x += CONST_PIXELSCALE / 2;
-    player.y += CONST_PIXELSCALE / 2;
-
-    goal.x += CONST_PIXELSCALE / 2;
-    goal.y += CONST_PIXELSCALE / 2;
-
-    draw_fill_circle(player, CONST_PIXELSCALE / 2, cPlayer);
-    draw_fill_circle(goal, CONST_PIXELSCALE / 2, cGoal);
+	draw_fill_circle(position, radius, color);
 
 }
