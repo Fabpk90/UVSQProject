@@ -4,8 +4,9 @@
 #define ERROR_ARGUMENTS -1
 
 
-#define COLOR_PLAYER rouge
+#define COLOR_PLAYER bleu
 #define COLOR_GOAL vert
+#define COLOR_WALL rouge
 
 #define CONST_PIXELSCALE 32
 

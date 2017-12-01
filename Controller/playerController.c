@@ -21,9 +21,8 @@ POINT getCornerScreen(POINT direction, Slider *slider);
 // pas de récursif ici, la mémoire serait gachée
 // iteratif, moche, mais niveau mémoire c'est mieux
 
-int8_t movePlayer(Slider * slider, POINT direction)
+uint8_t movePlayer(Slider * slider, POINT direction)
 {
-	int8_t result = -1;
 	Wall *wall = NULL;
 
 	POINT cornerPos;
@@ -42,7 +41,6 @@ int8_t movePlayer(Slider * slider, POINT direction)
 		if(wall != NULL)
 		{
 			cornerPos = getCorrectPosition(wall, direction);
-			printf("mur\n");
 		}
 		else
 		{
@@ -56,9 +54,12 @@ int8_t movePlayer(Slider * slider, POINT direction)
 
 
 		affiche_all();
+
+		if(cmpVec(slider->player.position,slider->goalPos))
+			return PLAYER_VICTORY;
 	}
 
-	return result;
+		return PLAYER_STUCK;
 }
 
 //returns a Vec2 of the cornerPos according to the direction
@@ -75,8 +76,6 @@ p.x = p.y = 0;
 	}
 	else if (direction.x > 0)
 	{
-//printf("droite\n");
-
 		p.x = ( (slider->resolution.x -1) - slider->player.position.x * CONST_PIXELSCALE);
 		p.y = 0;
 	}
@@ -84,8 +83,6 @@ p.x = p.y = 0;
 	{
 		p.x = 0;
 		p.y = -slider->player.position.y * CONST_PIXELSCALE;
-
-		printf("y = %d", slider->resolution.y);
 	}
 	else if(direction.y > 0)
 	{

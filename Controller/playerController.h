@@ -1,6 +1,6 @@
 #ifndef PLAYER
 #define PLAYER
 
-int8_t movePlayer(Slider * slider, POINT direction);
+uint8_t movePlayer(Slider * slider, POINT direction);
 
 #endif

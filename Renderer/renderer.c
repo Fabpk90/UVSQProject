@@ -64,8 +64,9 @@ void drawWalls(Wall * walls, uint nbWalls)
 	p1.y = p2.y = walls[i].position.y * CONST_PIXELSCALE;
 
 	updateWallFromDirection(&p1, &p2, walls[i].direction);
-
-	draw_line(p1, p2, c);
+p1.x--;
+p1.y--;
+ draw_fill_rectangle(p1, p2,  rouge);
     }
 }
 

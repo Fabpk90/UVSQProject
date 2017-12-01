@@ -7,6 +7,7 @@
 void Play(const char *filename)
 {
     Slider *slider = initFromFile(filename);
+    uint8_t playerStatus = 0;
 
     init_graphics(slider->resolution.x, slider->resolution.y);
 
@@ -15,10 +16,9 @@ void Play(const char *filename)
 	drawGame(slider);
 
 	if (!slider->isMoving)
-	    movePlayer(slider, get_arrow());
-
+	    playerStatus = movePlayer(slider, get_arrow());
     }
-    while (get_key() != 27);	//escape
+    while (get_key() != 27 && playerStatus == 0);	//escape
 
   free(slider->walls);
   free(slider);

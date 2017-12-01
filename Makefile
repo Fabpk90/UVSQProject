@@ -30,7 +30,7 @@ playerController.o: Controller/playerController.c Controller/playerController.h 
 #Penser à add un truc qui remplace "uvsqgraphics" en <> et enlever uvsqcouleur
 
 codingTime:
-	atom level0.slider Makefile  main.c Controller/playerController.c Controller/playerController.h Controller/controller.c Controller/controller.h Controller/wallController.c Controller/wallController.h Renderer/renderer.c Renderer/renderer.h Util/*.h
+	atom uvsqgraphics.h level0.slider Makefile  main.c Controller/playerController.c Controller/playerController.h Controller/controller.c Controller/controller.h Controller/wallController.c Controller/wallController.h Renderer/renderer.c Renderer/renderer.h Util/*.h
 
 zipit:
 	rm -rf ../$(name).zip
