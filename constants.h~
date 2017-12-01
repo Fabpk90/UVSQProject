@@ -8,10 +8,10 @@
 
 typedef enum ArrowType
 {
-	ARROWUP = 0,
-	ARROWRIGHT,
-	ARROWDOWN,
-	ARROWLEFT	
-}ArrowType;
+  ARROWUP = 0,
+  ARROWRIGHT,
+  ARROWDOWN,
+  ARROWLEFT
+} ArrowType;
 
 #endif
