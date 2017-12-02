@@ -4,7 +4,7 @@ compileFlags=-c -Wall `sdl-config --cflags`
 all: run
 
 run: compile
-	./Slider level0.slider
+	./Slider -c 1 1 level1.slider
 
 compile: renderer.o controller.o playerController.o main.o
 	gcc -o Slider main.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf

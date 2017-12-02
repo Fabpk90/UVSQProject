@@ -2,6 +2,7 @@
 #define CONSTANTS
 
 #define ERROR_ARGUMENTS -1
+#define ERROR_CREATING_FILE -2
 
 
 #define COLOR_PLAYER bleu

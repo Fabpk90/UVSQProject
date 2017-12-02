@@ -24,7 +24,23 @@ void Play(const char *filename)
   free(slider);
 }
 
-Slider *initFromFile(const char *filename)
+//Create the approriate file structure, then goes to the editor
+//TODO: handle if the player wants to overwrite an existing level
+void CreateLevel(int width, int height, const char *filename)
+{
+  FILE *level = fopen(filename, "w");
+  if(level != NULL)
+  {
+    fclose(level);
+  }
+  else
+  {
+    printf("Erreur pendant la création du fichier\n");
+    exit(ERROR_CREATING_FILE);
+  }
+}
+
+Slider* initFromFile(const char *filename)
 {
     FILE *level = fopen(filename, "r");
     Slider *slider = malloc(sizeof(Slider));
@@ -58,6 +74,8 @@ Slider *initFromFile(const char *filename)
 		fclose(level);
 		return slider;
     }
-    free(slider);
+
+  printf("Erreur de fichier! %s non valide\n", filename);
+  free(slider);
 	exit(-1);
 }
