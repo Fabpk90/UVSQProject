@@ -4,23 +4,26 @@ compileFlags=-c -Wall `sdl-config --cflags`
 all: run
 
 run: compile
-	./Slider -c 1 1 level1.slider
+	./Slider -c 10 10 level1.slider
 
-compile: renderer.o controller.o playerController.o main.o
-	gcc -o Slider main.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
+compile: renderer.o controller.o playerController.o main.o editorController.o
+	gcc -o Slider main.o obj/editorController.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
 
 #ajouter les headers corrects
-main.o: main.c
+main.o: main.c controller.o
 	gcc -o main.o $(compileFlags) main.c
 
-renderer.o: Renderer/renderer.c Renderer/renderer.h Util/constants.h Util/gridStruct.h
+renderer.o: Renderer/renderer.c
 	gcc -o obj/renderer.o $(compileFlags) Renderer/renderer.c
 
-controller.o: Controller/controller.c Controller/controller.h Util/constants.h Util/gridStruct.h Controller/playerController.h
+controller.o: Controller/controller.c
 	gcc -o obj/controller.o -c $(compileFlags) Controller/controller.c
 
-playerController.o: Controller/playerController.c Controller/playerController.h Util/constants.h Util/gridStruct.h
+playerController.o: Controller/playerController.c
 	gcc -o obj/playerController.o $(compileFlags) Controller/playerController.c
+
+editorController.o: Controller/editorController.c
+		gcc -o obj/editorController.o $(compileFlags) Controller/editorController.c
 
 #NomDuFichier.o: NomDuFichier.c NomDuFichier.h
 #	gcc -o NomDuFichier.o -c `sdl-config --cflags` NomDuFichier.c

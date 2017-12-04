@@ -6,23 +6,16 @@
 void drawMap(Slider * slider);
 void drawWalls(Wall * walls, uint nbWalls);
 
-void drawCircle(POINT position, COULEUR color, int radius);
 void updateWallFromDirection(POINT * p1, POINT * p2,
 			     WallDirection direction);
 
 void drawGame(Slider * slider)
 {
-
-    affiche_auto_off();
-
     drawMap(slider);
     drawWalls(slider->walls, slider->nbWalls);
 
 		drawCircle(slider->goalPos, COLOR_GOAL, CONST_PIXELSCALE / 2);
     drawCircle(slider->player.position, COLOR_PLAYER, CONST_PIXELSCALE / 2);
-
-
-    affiche_all();
 }
 
 //draws the rows and the cols of the map
@@ -63,11 +56,16 @@ void drawWalls(Wall * walls, uint nbWalls)
 	p1.x = p2.x = walls[i].position.x * CONST_PIXELSCALE;
 	p1.y = p2.y = walls[i].position.y * CONST_PIXELSCALE;
 
-	updateWallFromDirection(&p1, &p2, walls[i].direction);
+	drawWall(p1, p2, walls[i].direction);
+    }
+}
+
+void drawWall(POINT p1, POINT p2, WallDirection direction)
+{
+	updateWallFromDirection(&p1, &p2, direction);
 p1.x--;
 p1.y--;
- draw_fill_rectangle(p1, p2,  rouge);
-    }
+ draw_fill_rectangle(p1, p2,  COLOR_WALL);
 }
 
 void updateWallFromDirection(POINT * p1, POINT * p2,

@@ -1,8 +1,11 @@
-#include <uvsqgraphics.h>
+#include "uvsqgraphics.h"
+
+#include "../Util/constants.h"
+#include "../Util/gridStruct.h"
 
 #include "controller.h"
 #include "../Renderer/renderer.h"
-#include "../Controller/playerController.h"
+#include "playerController.h"
 
 void Play(const char *filename)
 {
@@ -12,32 +15,18 @@ void Play(const char *filename)
     init_graphics(slider->resolution.x, slider->resolution.y);
 
     do {
+      affiche_auto_off();
 	fill_screen(blanc);
 	drawGame(slider);
 
-	if (!slider->isMoving)
 	    playerStatus = movePlayer(slider, get_arrow());
+
+        affiche_all();
     }
     while (get_key() != 27 && playerStatus == 0);	//escape
 
   free(slider->walls);
   free(slider);
-}
-
-//Create the approriate file structure, then goes to the editor
-//TODO: handle if the player wants to overwrite an existing level
-void CreateLevel(int width, int height, const char *filename)
-{
-  FILE *level = fopen(filename, "w");
-  if(level != NULL)
-  {
-    fclose(level);
-  }
-  else
-  {
-    printf("Erreur pendant la création du fichier\n");
-    exit(ERROR_CREATING_FILE);
-  }
 }
 
 Slider* initFromFile(const char *filename)
@@ -47,7 +36,6 @@ Slider* initFromFile(const char *filename)
     uint i;
     if (level != NULL)
     {
-		slider->isMoving = 0;
 		slider->player.wall = NULL;
 		slider->walls = NULL;
 

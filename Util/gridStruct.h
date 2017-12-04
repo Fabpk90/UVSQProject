@@ -28,7 +28,6 @@ typedef struct Slider {
     uint nbWalls;
     Player player;
     POINT goalPos;
-    int8_t isMoving;
 } Slider;
 
 #endif

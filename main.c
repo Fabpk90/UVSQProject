@@ -1,7 +1,14 @@
-#include <uvsqgraphics.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+#include "uvsqgraphics.h"
+
+#include "Util/constants.h"
+#include "Util/gridStruct.h"
+
 #include "Controller/controller.h"
+#include "Controller/editorController.h"
 
 int main(int argc, char **argv)
 {
@@ -12,14 +19,12 @@ int main(int argc, char **argv)
 		//test if hte player wants to create a level
 		if(strcmp(argv[1], "-c") == 0)
 		{
-printf("creating level\n" );
-
 				width = atoi(argv[2]);
 				height = atoi(argv[3]);
 
 				if(width > 0 && height > 0)
 				{
-					CreateLevel(width, height, argv[1]);
+					CreateLevel(width, height, argv[4]);
 				}
 				else
 				{
