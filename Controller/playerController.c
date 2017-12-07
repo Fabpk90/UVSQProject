@@ -90,10 +90,8 @@ p.x = p.y = 0;
 		p.x = 0;
 		p.y = ((slider->resolution.y - 1) - slider->player.position.y * CONST_PIXELSCALE);
 	}
-
 	p.x /= CONST_PIXELSCALE;
 	p.y /= CONST_PIXELSCALE;
-
 	return p;
 }
 

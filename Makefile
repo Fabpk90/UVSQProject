@@ -1,13 +1,16 @@
 name=SantoroFabrizio
-compileFlags=-c -Wall `sdl-config --cflags`
+compileFlags=-c -g -Wall `sdl-config --cflags`
 
-all: run
+all: runGame
 
-run: compile
+runGame: compile
+	./Slider level0.slider
+
+runEditor: compile
 	./Slider -c 10 10 level1.slider
 
 compile: renderer.o controller.o playerController.o main.o editorController.o
-	gcc -o Slider main.o obj/editorController.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
+	gcc  -o Slider main.o obj/editorController.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
 
 #ajouter les headers corrects
 main.o: main.c controller.o

@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 				}
 		}
 			if(argc == 2)
-		    Play(argv[1]);
+		    Play(argv[1]); 
 		return 0;
 	}
 	else

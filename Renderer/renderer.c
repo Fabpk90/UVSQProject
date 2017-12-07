@@ -1,4 +1,4 @@
-#include <uvsqgraphics.h>
+#include <SDL.h>
 
 #include "../Util/constants.h"
 #include "renderer.h"

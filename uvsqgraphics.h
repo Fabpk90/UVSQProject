@@ -34,7 +34,7 @@
 
 // A décommenter si on fonctionne sur un host puissant
 // A laisser commenté si on est dans une machine virtuelle
-#define EN_LOCAL
+//#define EN_LOCAL
 
 // #####################################
 // 1. TYPES, VARIABLES, CONSTANTES (qst)
@@ -134,7 +134,7 @@ void mouse_off();
 
 // 3.1 CLAVIER
 
-	// 3.1.1 Renvoie le code ascii du caractère de la dernière touche 
+	// 3.1.1 Renvoie le code ascii du caractère de la dernière touche
 	// du clavier qui a été pressée.
 	// Si aucune touche n'a été pressée, renvoie -1
 	// Fonction non bloquante.
@@ -145,7 +145,7 @@ int get_key();			// Made by ys
 void wait_escape();
 
 	// 3.1.3 Renvoie le ou les flèches appuyées
-	// sous forme d'un déplacement en 
+	// sous forme d'un déplacement en
 	// x négatif = nombre d'appuis sur la flèche gauche
 	// x positif = nombre d'appuis sur la flèche droite
 	// y négatif = nombre d'appuis sur la flèche bas
@@ -190,12 +190,12 @@ void draw_pixel(POINT p, COULEUR coul);
 void draw_line(POINT p1, POINT p2, COULEUR coul);
 
 	// 4.4 Dessine un rectangle non rempli
-	// Les deux points sont deux points quelconques 
+	// Les deux points sont deux points quelconques
 	// non adjacents du rectangle
 void draw_rectangle(POINT p1, POINT p2, COULEUR coul);
 
 	// 4.5 Dessine un rectangle rempli
-	// Les deux point sont deux points quelconques 
+	// Les deux point sont deux points quelconques
 	// non adjacents du rectangle
 void draw_fill_rectangle(POINT p1, POINT p2, COULEUR coul);
 
@@ -237,8 +237,8 @@ int hauteur_texte(char *a_ecrire, int taille);
 void pol_style(int style);
 
 	// 5.1 Affiche du texte avec
-	// Le texte est passé dans l'argument "a_ecrire" 
-	// la police est celle définie par la constante POLICE_NAME 
+	// Le texte est passé dans l'argument "a_ecrire"
+	// la police est celle définie par la constante POLICE_NAME
 	// dans graphics.c
 	// la taille est passée en argument
 	// l'argument hg de type POINT est le point en haut à gauche
