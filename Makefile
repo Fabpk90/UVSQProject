@@ -38,6 +38,9 @@ editorController.o: Controller/editorController.c
 codingTime:
 	atom uvsqgraphics.h level0.slider Makefile  main.c Controller/playerController.c Controller/playerController.h Controller/controller.c Controller/controller.h Controller/wallController.c Controller/wallController.h Renderer/renderer.c Renderer/renderer.h Util/*.h
 
+openSdl:
+	atom `sdl-config --cflags`
+
 zipit:
 	rm -rf ../$(name).zip
 	mkdir ../Release

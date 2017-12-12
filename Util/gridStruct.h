@@ -1,11 +1,6 @@
 #ifndef GRIDSTRUCT
 #define GRIDSTRUCT
 
-typedef struct Vec2{
-  int x;
-  int y;
-}POINT;
-
 typedef enum WallDirection {
     WALLUP = 0,
     WALLRIGHT = 1,

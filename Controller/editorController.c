@@ -72,14 +72,20 @@ void EditLevel(Slider *slider)
   POINT click, mousePosition;
   BOOL isQuitting = false;
   WallDirection wallDir = 0;
-  int keyboard = get_key();
+
+  //SDL_Init(SDL_INIT_VIDEO);
+
+  int keyboard = 0;
   init_graphics(slider->resolution.x, slider->resolution.y);
   affiche_auto_off();
+
+//disable key repeating
+SDL_EnableKeyRepeat(0, 1);
   do {
     //if the user clicks
     if(click.x != -1 && click.y != -1)
     {
-      handleClick(slider, action, click, wallDir);
+      printf("yo\n");//handleClick(slider, action, click, wallDir);
     }
 
     fill_screen(blanc);
@@ -90,28 +96,29 @@ void EditLevel(Slider *slider)
         case SDL_MOUSEBUTTONDOWN:
             printf("test\n");
           break;
+          case SDL_QUIT:
+            isQuitting = true;
+            break;
+            case SDL_KEYDOWN:
+              switch( event.key.keysym.sym )
+              {
+                  case SDLK_ESCAPE:
+                  isQuitting = true;
+                  break;
+                  case SDLK_r:
+                  wallDir = (wallDir + 1) % 4;
+                  break;
+                  case SDLK_w:
+                  action = PLACINGWALL;
+                  break;
+              }
       }
     }
     drawGame(slider);
-      switch(keyboard)
-      {
-        //q
-        case 113:
-          isQuitting = true;
-          break;
-          //r
-          case 114:
-          wallDir = (wallDir + 1) % 4;
-          break;
-          //w
-          case 119:
-          action = PLACINGWALL;
-          break;
-      }
     drawMouse(mousePosition, action, wallDir);
     affiche_all();
 
-    keyboard = get_key();
+    keyboard = -1;
 
     SDL_GetMouseState(&mousePosition.x, &mousePosition.y);
     mousePosition.y = abs(mousePosition.y - slider->resolution.y);
@@ -122,6 +129,13 @@ void EditLevel(Slider *slider)
       }
 
   } while(!isQuitting);
+
+
+
+  free(slider->walls);
+  free(slider);
+
+  SDL_Quit();
 }
 
 //Execute a command according to the action type
