@@ -18,6 +18,8 @@ void move(Slider * slider, POINT position);
 POINT getCorrectPosition(Wall *wall, POINT direction);
 POINT getCornerScreen(POINT direction, Slider *slider);
 
+void addPlay(Player *player, POINT lastPos);
+
 // pas de récursif ici, la mémoire serait gachée
 // iteratif, moche, mais niveau mémoire c'est mieux
 
@@ -51,8 +53,6 @@ uint8_t movePlayer(Slider * slider, POINT direction)
 
 		move(slider, cornerPos);
 		//wall = getBlockingBlock(slider, arrowDirection);
-
-
 		affiche_all();
 
 		if(cmpVec(slider->player.position,slider->goalPos))
@@ -193,13 +193,22 @@ Wall* searchForObstacle(Slider *slider, POINT direction)
 // move step by step and stops when cannot move
 void move(Slider * slider, POINT position)
 {
-
 		//test if the animation doesn't exceeds the screen
 		if(position.x >= 0 && position.x <= (slider->resolution.x / CONST_PIXELSCALE)
 		&& position.y >= 0 && position.y <= (slider->resolution.y / CONST_PIXELSCALE) )
 		{
 			slider->player.position = position;
 		}
+}
+
+void addPlay(Player *player, POINT lastPos)
+{
+	pilePlays *play = malloc(sizeof(pilePlays));
+	play->next = NULL;
+	play->playPosition = lastPos;
+
+	play->next = &player->plays;
+	player->plays = *play;
 }
 
 //Returns a arrowType according to the input

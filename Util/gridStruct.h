@@ -1,6 +1,11 @@
 #ifndef GRIDSTRUCT
 #define GRIDSTRUCT
 
+typedef struct pilePlays{
+  POINT playPosition;
+  struct pilePlays *next;
+}pilePlays;
+
 typedef enum WallDirection {
     WALLUP = 0,
     WALLRIGHT = 1,
@@ -16,6 +21,7 @@ typedef struct Wall {
 typedef struct Player
 {
 	POINT position;
+  pilePlays plays;
 
 	//used for knowing if it has reached his destination
 	//if null, no destination

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dirent.h>
+
 #include "uvsqgraphics.h"
 
 #include "Util/constants.h"
@@ -13,6 +15,9 @@
 int main(int argc, char **argv)
 {
 	int width = 0, height = 0;
+	DIR* directory = NULL;
+	struct dirent* fileInDir = NULL;
+	char path[255];
 
 	if(argc  >  1)
 	{
@@ -32,13 +37,35 @@ int main(int argc, char **argv)
 					exit(ERROR_ARGUMENTS);
 				}
 		}
-			if(argc == 2)
-		    Play(argv[1]);
+		else if(argc == 2) //wants to play, first test if dir else test if level
+		{
+			directory = opendir(argv[1]);
+
+			if(directory != NULL)
+			{
+				strcpy(path, argv[1]);
+				while ((fileInDir = readdir(directory)) != NULL)
+				{
+					if (strstr(fileInDir->d_name, ".slider") != NULL)
+					{
+							printf("%s%s",path, fileInDir->d_name);
+
+							Play(fileInDir->d_name);
+					}
+				}
+				closedir(directory);
+			}
+			else
+			{
+				perror("");
+				printf("sa");//Play(argv[1]);
+			}
+		}
 		return 0;
 	}
 	else
 	{
-		printf("Nombres d'arguments invalide");
+		printf("Nombres d'arguments invalides");
 		exit(ERROR_ARGUMENTS);
 	}
 }

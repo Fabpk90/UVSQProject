@@ -4,7 +4,7 @@ compileFlags=-c -g -Wall `sdl-config --cflags`
 all: runGame
 
 runGame: compile
-	./Slider level0.slider
+	./Slider level
 
 runEditor: compile
 	./Slider -c 10 10 level1.slider

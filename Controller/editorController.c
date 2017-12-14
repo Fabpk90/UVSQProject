@@ -66,76 +66,36 @@ BOOL initSliderPartial(Slider *slider, const char *filename)
 //gets the level from the file, then edit
 void EditLevel(Slider *slider)
 {
-  SDL_Event event;
-  EditorAction action = 0;
-  //action = (action + 1) % (int)PLACINGNONE;
+  EditorAction action = 0;//action = (action + 1) % (int)PLACINGNONE;
   POINT click, mousePosition;
   BOOL isQuitting = false;
   WallDirection wallDir = 0;
-
-  //SDL_Init(SDL_INIT_VIDEO);
-
-  int keyboard = 0;
+  char keyboard = 0;
+  int arrow;
   init_graphics(slider->resolution.x, slider->resolution.y);
   affiche_auto_off();
-
-//disable key repeating
-SDL_EnableKeyRepeat(0, 1);
+SDL_EnableKeyRepeat(0, 1); //disable key repeating
   do {
-    //if the user clicks
-    if(click.x != -1 && click.y != -1)
-    {
-      printf("yo\n");//handleClick(slider, action, click, wallDir);
-    }
-
     fill_screen(blanc);
-
-    while(SDL_PollEvent(&event))
-    {
-      switch(event.type){
-        case SDL_MOUSEBUTTONDOWN:
-            printf("test\n");
-          break;
-          case SDL_QUIT:
-            isQuitting = true;
-            break;
-            case SDL_KEYDOWN:
-              switch( event.key.keysym.sym )
-              {
-                  case SDLK_ESCAPE:
-                  isQuitting = true;
-                  break;
-                  case SDLK_r:
-                  wallDir = (wallDir + 1) % 4;
-                  break;
-                  case SDLK_w:
-                  action = PLACINGWALL;
-                  break;
-              }
-      }
-    }
     drawGame(slider);
     drawMouse(mousePosition, action, wallDir);
     affiche_all();
+    wait_key_arrow_clic (&keyboard, &arrow,  &click);
+    switch(keyboard)
+    {
+      case 'W':
+        printf("W\n");
+      break;
+      case 'Q':
+        isQuitting = true;
+      break;
 
-    keyboard = -1;
+    }
 
-    SDL_GetMouseState(&mousePosition.x, &mousePosition.y);
-    mousePosition.y = abs(mousePosition.y - slider->resolution.y);
-
-      if(keyboard != -1)
-      {
-          printf("%d\n", keyboard);
-      }
 
   } while(!isQuitting);
-
-
-
   free(slider->walls);
   free(slider);
-
-  SDL_Quit();
 }
 
 //Execute a command according to the action type
@@ -159,17 +119,18 @@ void handleClick(Slider *slider, EditorAction action, POINT clickPosition, WallD
   }
 }
 
-//TODO: check if the wall is not altready placed
+//TODO: check if the wall is not already placed
 //add the wall to the slider struct
 void placeWall(POINT position, Slider *slider, WallDirection direction)
 {
 
   printf("placing wall\n");
   slider->walls = realloc(slider->walls, (slider->nbWalls + 1) * sizeof(Wall));
-  slider->nbWalls++;
 
   slider->walls[slider->nbWalls].position = position;
   slider->walls[slider->nbWalls].direction = direction;
+
+    slider->nbWalls++;
 }
 
 //draw a specific thing according to the action

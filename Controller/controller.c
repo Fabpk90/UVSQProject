@@ -14,20 +14,16 @@ void Play(const char *filename)
 {
     Slider *slider = initFromFile(filename);
     uint8_t playerStatus = 0;
-
     init_graphics(slider->resolution.x, slider->resolution.y);
-
-    do {
+    do
+    {
       affiche_auto_off();
-	fill_screen(blanc);
-	drawGame(slider);
-
+	    fill_screen(blanc);
+	    drawGame(slider);
 	    playerStatus = movePlayer(slider, get_arrow());
-
-        affiche_all();
+      affiche_all();
     }
-    while (get_key() != KEY_EXIT && playerStatus == 0);	//escape
-
+    while (get_key() != KEY_EXIT && playerStatus == PLAYER_STUCK);	//escape or completed level
   free(slider->walls);
   free(slider);
 }
