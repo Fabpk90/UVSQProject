@@ -21,7 +21,7 @@ typedef struct Wall {
 typedef struct Player
 {
 	POINT position;
-  pilePlays plays;
+  pilePlays *plays;
 
 	//used for knowing if it has reached his destination
 	//if null, no destination

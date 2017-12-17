@@ -21,6 +21,7 @@ void Play(const char *filename)
 	    fill_screen(blanc);
 	    drawGame(slider);
 	    playerStatus = movePlayer(slider, get_arrow());
+
       affiche_all();
     }
     while (get_key() != KEY_EXIT && playerStatus == PLAYER_STUCK);	//escape or completed level
@@ -69,7 +70,6 @@ void loadWalls(Slider *slider, FILE* level)
   if (slider->nbWalls != 0)
   {
     slider->walls = malloc(slider->nbWalls * sizeof(Wall));
-
     for (i = 0; i < slider->nbWalls; i++)
     {
       valRead = fscanf(level, "%d %d %d\n", &slider->walls[i].position.x,&slider->walls[i].position.y,  &slider->walls[i].direction);

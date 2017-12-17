@@ -6,19 +6,12 @@
 #include "playerController.h"
 #include "../Util/vectorUtil.h"
 
-
-// mouvement, checker les murs dans la même direction
-// checker le plus proche et compter les pas
-// animation des pas
-
 ArrowType getArrow(POINT arrowInput);
 Wall* searchForObstacle(Slider *slider, POINT direction);
 void move(Slider * slider, POINT position);
 
 POINT getCorrectPosition(Wall *wall, POINT direction);
 POINT getCornerScreen(POINT direction, Slider *slider);
-
-void addPlay(Player *player, POINT lastPos);
 
 // pas de récursif ici, la mémoire serait gachée
 // iteratif, moche, mais niveau mémoire c'est mieux
@@ -156,12 +149,9 @@ BOOL isWallOnPath(POINT playerPos, Wall *wall, POINT direction)
 		{
 			return true;
 		}
-
 	}
-
 	return false;
 }
-
 
 //Returns a pointer to the nearest Obstacle, null if none
 Wall* searchForObstacle(Slider *slider, POINT direction)
@@ -197,18 +187,35 @@ void move(Slider * slider, POINT position)
 		if(position.x >= 0 && position.x <= (slider->resolution.x / CONST_PIXELSCALE)
 		&& position.y >= 0 && position.y <= (slider->resolution.y / CONST_PIXELSCALE) )
 		{
+			addPlay(&slider->player, slider->player.position);
 			slider->player.position = position;
 		}
 }
 
-void addPlay(Player *player, POINT lastPos)
+void addPlay(Player *player, POINT lastPos) //push
 {
 	pilePlays *play = malloc(sizeof(pilePlays));
-	play->next = NULL;
-	play->playPosition = lastPos;
+	if(play != NULL)
+	{
+		play->next = player->plays;
+		play->playPosition = lastPos;
+		player->plays = play;
+	}
+}
 
-	play->next = &player->plays;
-	player->plays = *play;
+BOOL undoPlay(Player *player) //pop
+{
+	pilePlays *play= NULL;
+	if(player->plays != NULL)
+	{
+		player->position = player->plays->playPosition;
+		play = player->plays;
+		player->plays = player->plays->next;
+		free(play);
+		return true;
+	}
+	else
+		return false;
 }
 
 //Returns a arrowType according to the input
