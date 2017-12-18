@@ -14,6 +14,7 @@ void Play(const char *filename)
 {
     Slider *slider = initFromFile(filename);
     uint8_t playerStatus = 0;
+    char key = -1;
     init_graphics(slider->resolution.x, slider->resolution.y);
     do
     {
@@ -23,10 +24,20 @@ void Play(const char *filename)
 	    playerStatus = movePlayer(slider, get_arrow());
 
       affiche_all();
+      key = get_key();
+      if(key == 'u')
+      {
+        undoPlay(&slider->player);
+      }
     }
-    while (get_key() != KEY_EXIT && playerStatus == PLAYER_STUCK);	//escape or completed level
+    while (playerStatus == PLAYER_STUCK);	//escape or completed level
   free(slider->walls);
   free(slider);
+}
+
+void freePlays(Player *player)
+{
+
 }
 
 Slider* initFromFile(const char *filename)
@@ -36,6 +47,7 @@ Slider* initFromFile(const char *filename)
     if (level != NULL)
     {
   		slider->player.wall = NULL;
+      slider->player.plays = NULL;
   		slider->walls = NULL;
 
   		fscanf(level, "%d %d", &slider->resolution.x,

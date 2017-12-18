@@ -187,19 +187,25 @@ void move(Slider * slider, POINT position)
 		if(position.x >= 0 && position.x <= (slider->resolution.x / CONST_PIXELSCALE)
 		&& position.y >= 0 && position.y <= (slider->resolution.y / CONST_PIXELSCALE) )
 		{
-			addPlay(&slider->player, slider->player.position);
+			addPlay(&slider->player);
 			slider->player.position = position;
 		}
 }
 
-void addPlay(Player *player, POINT lastPos) //push
+void addPlay(Player *player) //push
 {
 	pilePlays *play = malloc(sizeof(pilePlays));
 	if(play != NULL)
 	{
-		play->next = player->plays;
-		play->playPosition = lastPos;
-		player->plays = play;
+
+		if(player->plays == NULL
+			|| !cmpVec(player->position, player->plays->playPosition))
+			{
+				play->next = player->plays;
+				play->playPosition = player->position;
+				player->plays = play;
+			}
+
 	}
 }
 
@@ -218,7 +224,7 @@ BOOL undoPlay(Player *player) //pop
 		return false;
 }
 
-//Returns a arrowType according to the input
+//Returns an arrowType according to the input
 ArrowType getArrow(POINT arrowInput)
 {
     if (arrowInput.x != 0)	//left or right
