@@ -25,19 +25,26 @@ void Play(const char *filename)
 
       affiche_all();
       key = get_key();
-      if(key == 'u')
+      if(key == KEY_UNDO)
       {
         undoPlay(&slider->player);
       }
     }
     while (playerStatus == PLAYER_STUCK);	//escape or completed level
+  freePlays(&slider->player);
   free(slider->walls);
   free(slider);
 }
 
 void freePlays(Player *player)
 {
-
+  pilePlays *play = NULL;
+  while(player->plays != NULL)
+  {
+     play = player->plays->next;
+     free(player->plays);
+     player->plays = play;
+  }
 }
 
 Slider* initFromFile(const char *filename)
@@ -50,8 +57,7 @@ Slider* initFromFile(const char *filename)
       slider->player.plays = NULL;
   		slider->walls = NULL;
 
-  		fscanf(level, "%d %d", &slider->resolution.x,
-  			   &slider->resolution.y);
+  		fscanf(level, "%d %d", &slider->resolution.x,&slider->resolution.y);
   		slider->resolution.x *= CONST_PIXELSCALE;
   		slider->resolution.y *= CONST_PIXELSCALE;
 
@@ -59,7 +65,6 @@ Slider* initFromFile(const char *filename)
   		fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
 
       loadWalls(slider, level);
-
       if(getc(level) != EOF)
       {
         printf("Nombre de murs non valide\n");
@@ -69,7 +74,6 @@ Slider* initFromFile(const char *filename)
   		fclose(level);
   		return slider;
     }
-
   printf("Erreur de fichier! %s non valide\n", filename);
   free(slider);
 	exit(-1);
@@ -78,7 +82,7 @@ Slider* initFromFile(const char *filename)
 void loadWalls(Slider *slider, FILE* level)
 {
   uint i, valRead;
-  fscanf(level, "%d", &slider->nbWalls);
+  fscanf(level, "%d\n", &slider->nbWalls);
   if (slider->nbWalls != 0)
   {
     slider->walls = malloc(slider->nbWalls * sizeof(Wall));
@@ -86,15 +90,15 @@ void loadWalls(Slider *slider, FILE* level)
     {
       valRead = fscanf(level, "%d %d %d\n", &slider->walls[i].position.x,&slider->walls[i].position.y,  &slider->walls[i].direction);
       if(valRead == 3)
-        {
-          slider->walls[i].direction /= 3;
-        }
+      {
+        slider->walls[i].direction /= 3;
+      }
       else
       {
-          free(slider);
-          free(slider->walls);
-          printf("Le mur n'est pas valide sur la ligne des murs num : %d \n", i+1);
-          exit(ERROR_CREATING_WALLS);
+        free(slider);
+        free(slider->walls);
+        printf("Le mur n'est pas valide sur la ligne des murs num : %d \n", i+1);
+        exit(ERROR_CREATING_WALLS);
       }
     }
   }

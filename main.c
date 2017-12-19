@@ -37,29 +37,39 @@ int main(int argc, char **argv)
 					exit(ERROR_ARGUMENTS);
 				}
 		}
-		else if(argc == 2) //wants to play, first test if dir else test if level
+		else if(argc == 2) //wants to play, first test if level else test if dir
 		{
-			directory = opendir(argv[1]);
-
-			if(directory != NULL)
+			if(strstr(argv[1], ".slider"))
 			{
-				strcpy(path, argv[1]);
-				while ((fileInDir = readdir(directory)) != NULL)
-				{
-					if (strstr(fileInDir->d_name, ".slider") != NULL)
-					{
-							printf("%s%s",path, fileInDir->d_name);
-
-							Play(fileInDir->d_name);
-					}
-				}
-				closedir(directory);
+				printf("%d", strstr(argv[1], ".slider"));
+				Play(argv[1]);
 			}
 			else
 			{
-				perror("");
-				printf("sa");//Play(argv[1]);
+					directory = opendir(argv[1]);
+					if(directory != NULL)
+					{
+
+						while ((fileInDir = readdir(directory)) != NULL)
+						{
+							if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
+							{
+								strcpy(path, argv[1]);
+								strcat(path, fileInDir->d_name);
+									printf("%s\n",path);
+
+									//TODO: add return type to Play, errors
+									Play(path);
+							}
+						}
+						closedir(directory);
+					}
+					else
+					{
+						perror("");//Play(argv[1]);
+					}
 			}
+
 		}
 		return 0;
 	}

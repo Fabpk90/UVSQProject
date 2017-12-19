@@ -7,6 +7,7 @@
 #define ERROR_CREATING_WALLS -4
 
 #define KEY_EXIT 113 //q
+#define KEY_UNDO 'u'
 
 
 #define COLOR_PLAYER bleu
