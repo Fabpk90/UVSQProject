@@ -6,9 +6,15 @@
 #define ERROR_CREATING_WALLS_NB -3
 #define ERROR_CREATING_WALLS -4
 
-#define KEY_EXIT 113 //q
+#define KEY_EXIT 'Q' //q
 #define KEY_UNDO 'u'
 
+
+#define KEY_EDITOR_PLAYER 'P'
+#define KEY_EDITOR_GOAL 'G'
+#define KEY_EDITOR_WALL 'W'
+#define KEY_EDITOR_WALL_ROTATION 'R'
+#define KEY_EDITOR_SAVE 'S'
 
 #define COLOR_PLAYER bleu
 #define COLOR_GOAL vert

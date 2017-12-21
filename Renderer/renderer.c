@@ -48,9 +48,6 @@ void drawWalls(Wall * walls, uint nbWalls)
 {
     POINT p1, p2;
     int i;
-    COULEUR c;
-
-    c = couleur_RGB(255, 0, 0);
 
     for (i = 0; i < nbWalls; i++) {
 	p1.x = p2.x = walls[i].position.x * CONST_PIXELSCALE;

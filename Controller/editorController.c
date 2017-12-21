@@ -1,5 +1,7 @@
 #include "uvsqgraphics.h"
 
+#include <errno.h>
+
 #include "../Util/gridStruct.h"
 #include "../Util/constants.h"
 
@@ -10,63 +12,42 @@
 
 
 void handleClick(Slider *slider, EditorAction action, POINT clickPosition, WallDirection wallDir);
+void handleKeyboard(int key, EditorAction  *action, BOOL *isQuitting, WallDirection *wallDir,
+   Slider *slider, const char *filename);
 void placeWall(POINT position, Slider *slider, WallDirection direction);
 void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir);
 
-BOOL initSliderPartial(Slider *slider, const char *filename);
+void saveLevel(Slider *slider, const char *filename);
+
+void initSliderPartial(Slider *slider, int width, int height);
 
 //Create the approriate file structure, then goes to the editor
 //TODO: handle if the player wants to overwrite an existing level
 void CreateLevel(int width, int height, const char *filename)
 {
-  FILE *level = fopen(filename, "w");
   Slider *slider = malloc(sizeof(Slider));
-  if(level != NULL)
-  {
-    fprintf(level, "%d %d\n", width, height);
-    fprintf(level, "0  0\n");
-    fprintf(level, "0  0\n");
-    fprintf(level, "0\n");
 
-    fclose(level);
+    initSliderPartial(slider, width, height);
 
-    initSliderPartial(slider, filename);
-
-    EditLevel(slider);
-  }
-  else
-  {
-    free(slider);
-    printf("Erreur pendant la création du fichier\n");
-    exit(ERROR_CREATING_FILE);
-  }
+    EditLevel(slider, filename);
 }
 
-BOOL initSliderPartial(Slider *slider, const char *filename)
+void initSliderPartial(Slider *slider, int width, int height)
 {
-  FILE *level = fopen(filename, "r");
+    slider->resolution.x = CONST_PIXELSCALE * width;
+    slider->resolution.y = CONST_PIXELSCALE * height;
 
-  if(level != NULL)
-  {
-    fscanf(level, "%d %d", &slider->resolution.x, &slider->resolution.y);
-    slider->resolution.x *= CONST_PIXELSCALE;
-    slider->resolution.y *= CONST_PIXELSCALE;
-
-    fscanf(level, "%d %d", &slider->player.position.x, &slider->player.position.y);
-    fscanf(level, "%d %d", &slider->goalPos.x, &slider->goalPos.y);
+    slider->player.position.x = slider->player.position.y = -1;
+    slider->goalPos = slider->player.position;
 
     slider->nbWalls = 0;
     slider->walls = NULL;
-
-    return true;
-  }
-  return false;
 }
 
 //gets the level from the file, then edit
-void EditLevel(Slider *slider)
+void EditLevel(Slider *slider, const char *filename)
 {
-  EditorAction action = 0;//action = (action + 1) % (int)PLACINGNONE;
+  EditorAction action = -1;//action = (action + 1) % (int)PLACINGNONE;
   POINT click, mousePosition;
   BOOL isQuitting = false;
   WallDirection wallDir = 0;
@@ -74,28 +55,46 @@ void EditLevel(Slider *slider)
   int arrow;
   init_graphics(slider->resolution.x, slider->resolution.y);
   affiche_auto_off();
-SDL_EnableKeyRepeat(0, 1); //disable key repeating
   do {
     fill_screen(blanc);
     drawGame(slider);
     drawMouse(mousePosition, action, wallDir);
     affiche_all();
+    click.x = click.y = keyboard = -1;
     wait_key_arrow_clic (&keyboard, &arrow,  &click);
-    switch(keyboard)
-    {
-      case 'W':
-        printf("W\n");
-      break;
-      case 'Q':
-        isQuitting = true;
-      break;
-
-    }
-
-
+    if(keyboard != -1)
+      handleKeyboard(keyboard, &action, &isQuitting, &wallDir, slider, filename);
+    else if(click.x != -1)
+      handleClick(slider, action, click, wallDir);
   } while(!isQuitting);
   free(slider->walls);
   free(slider);
+}
+
+void handleKeyboard(int key, EditorAction  *action, BOOL *isQuitting, WallDirection *wallDir,
+  Slider *slider, const char *filename)
+{
+  switch(key)
+  {
+    case KEY_EDITOR_WALL:
+      *action = PLACINGWALL;
+    break;
+    case KEY_EDITOR_WALL_ROTATION:
+      *wallDir = (*wallDir + 1) % 4;
+      break;
+    case KEY_EDITOR_PLAYER:
+      *action = PLACINGPLAYER;
+    break;
+    case KEY_EDITOR_GOAL:
+      *action = PLACINGGOAL;
+    break;
+    case KEY_EXIT:
+      *isQuitting = true;
+    break;
+    case KEY_EDITOR_SAVE:
+      saveLevel(slider, filename);
+    break;
+  }
 }
 
 //Execute a command according to the action type
@@ -113,8 +112,7 @@ void handleClick(Slider *slider, EditorAction action, POINT clickPosition, WallD
       slider->player.position = p;
       break;
       case PLACINGWALL:
-      printf("wall\n");
-        placeWall(clickPosition, slider, wallDir);
+        placeWall(p, slider, wallDir);
       break;
   }
 }
@@ -123,17 +121,16 @@ void handleClick(Slider *slider, EditorAction action, POINT clickPosition, WallD
 //add the wall to the slider struct
 void placeWall(POINT position, Slider *slider, WallDirection direction)
 {
-
-  printf("placing wall\n");
   slider->walls = realloc(slider->walls, (slider->nbWalls + 1) * sizeof(Wall));
 
   slider->walls[slider->nbWalls].position = position;
   slider->walls[slider->nbWalls].direction = direction;
 
-    slider->nbWalls++;
+  slider->nbWalls++;
 }
 
 //draw a specific thing according to the action
+//useless because of the input handling
 void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
 {
       POINT p2Wall;
@@ -143,12 +140,12 @@ void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
   switch(action)
   {
     case PLACINGGOAL:
-    drawCircle(mousePosition, COLOR_GOAL, CONST_PIXELSCALE / 2 );
+      drawCircle(mousePosition, COLOR_GOAL, CONST_PIXELSCALE / 2 );
     break;
 
     case PLACINGPLAYER:
-        drawCircle(mousePosition, COLOR_PLAYER, CONST_PIXELSCALE / 2 );
-        break;
+      drawCircle(mousePosition, COLOR_PLAYER, CONST_PIXELSCALE / 2 );
+    break;
 
     case PLACINGWALL:
     mousePosition.x *= CONST_PIXELSCALE;
@@ -157,4 +154,27 @@ void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
       drawWall(mousePosition,p2Wall, wallDir);
     break;
   }
+}
+
+void saveLevel(Slider *slider, const char *filename)
+{
+printf("%s\n", filename);
+
+  FILE *level = fopen(filename, "w+");
+  int i;
+  if (level != NULL)
+  {
+    fprintf(level, "%d %d\n", slider->resolution.x / CONST_PIXELSCALE, slider->resolution.y / CONST_PIXELSCALE);
+    fprintf(level, "%d %d\n", slider->player.position.x, slider->player.position.y);
+    fprintf(level, "%d %d\n", slider->goalPos.x, slider->goalPos.y);
+    fprintf(level, "%d\n", slider->nbWalls);
+    for(i = 0; i < slider->nbWalls; i++)
+    {
+      fprintf(level, "%d %d %d\n", slider->walls[i].position.x, slider->walls[i].position.y,
+                                    slider->walls[i].direction * 3);
+    }
+    fclose(level);
+  }
+  else
+    printf("Erreur de fichier! %s\n", strerror(errno));
 }

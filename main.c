@@ -41,7 +41,6 @@ int main(int argc, char **argv)
 		{
 			if(strstr(argv[1], ".slider"))
 			{
-				printf("%d", strstr(argv[1], ".slider"));
 				Play(argv[1]);
 			}
 			else
@@ -49,16 +48,16 @@ int main(int argc, char **argv)
 					directory = opendir(argv[1]);
 					if(directory != NULL)
 					{
-
+						//circle through .slider files
 						while ((fileInDir = readdir(directory)) != NULL)
 						{
 							if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
 							{
 								strcpy(path, argv[1]);
 								strcat(path, fileInDir->d_name);
-									printf("%s\n",path);
+									//printf("%s\n",path);
 
-									//TODO: add return type to Play, errors
+									//TODO: add return type to Play, for errors
 									Play(path);
 							}
 						}
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
 					}
 					else
 					{
-						perror("");//Play(argv[1]);
+						perror("");
 					}
 			}
 
@@ -78,4 +77,6 @@ int main(int argc, char **argv)
 		printf("Nombres d'arguments invalides");
 		exit(ERROR_ARGUMENTS);
 	}
+
+	return 0;
 }

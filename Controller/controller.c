@@ -9,6 +9,7 @@
 
 
 void loadWalls(Slider *slider, FILE* level);
+void freePlays(Player *player);
 
 void Play(const char *filename)
 {
@@ -30,7 +31,7 @@ void Play(const char *filename)
         undoPlay(&slider->player);
       }
     }
-    while (playerStatus == PLAYER_STUCK);	//escape or completed level
+    while (key != KEY_EXIT && playerStatus == PLAYER_STUCK);	//escape or completed level
   freePlays(&slider->player);
   free(slider->walls);
   free(slider);
