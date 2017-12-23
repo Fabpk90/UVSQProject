@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 				}
 				else
 				{
-					printf("Valeurs de la grille non valides !");
+					printf("Valeurs de la grille non valides !\n");
 					exit(ERROR_ARGUMENTS);
 				}
 		}
@@ -45,6 +45,11 @@ int main(int argc, char **argv)
 			}
 			else
 			{
+				if(!strstr("/", argv[1]))
+				{
+					strcat(argv[1], "/");
+				}
+
 					directory = opendir(argv[1]);
 					if(directory != NULL)
 					{
@@ -74,7 +79,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		printf("Nombres d'arguments invalides");
+		printf("Nombres d'arguments invalides\n");
 		exit(ERROR_ARGUMENTS);
 	}
 
