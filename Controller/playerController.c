@@ -205,6 +205,10 @@ void addPlay(Player *player) //push
 				play->playPosition = player->position;
 				player->plays = play;
 			}
+			else
+			{
+				free(play);
+			}
 
 	}
 }

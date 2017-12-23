@@ -158,8 +158,6 @@ void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
 
 void saveLevel(Slider *slider, const char *filename)
 {
-printf("%s\n", filename);
-
   FILE *level = fopen(filename, "w+");
   int i;
   if (level != NULL)
@@ -173,6 +171,9 @@ printf("%s\n", filename);
       fprintf(level, "%d %d %d\n", slider->walls[i].position.x, slider->walls[i].position.y,
                                     slider->walls[i].direction * 3);
     }
+
+    printf("Niveau sauvegarde\n");
+
     fclose(level);
   }
   else
