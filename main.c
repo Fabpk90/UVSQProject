@@ -12,13 +12,46 @@
 #include "Controller/controller.h"
 #include "Controller/editorController.h"
 
-int main(int argc, char **argv)
+//load all the levels contained in the param
+void loadDir(char* argv[])
 {
-	int width = 0, height = 0;
 	DIR* directory = NULL;
 	struct dirent* fileInDir = NULL;
 	char path[255];
+	//if the dir param need a / at the end
+	if(!strstr("/", argv[1]))
+	{
+		strcat(argv[1], "/");
+	}
 
+		directory = opendir(argv[1]);
+		if(directory != NULL)
+		{
+			//circle through .slider files
+			while ((fileInDir = readdir(directory)) != NULL)
+			{
+				if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
+				{
+					strcpy(path, argv[1]);
+					strcat(path, fileInDir->d_name);
+						//printf("%s\n",path);
+
+						//TODO: add return type to Play, for errors
+						Play(path);
+				}
+			}
+			closedir(directory);
+			free(fileInDir);
+		}
+		else
+		{
+			perror("");
+		}
+}
+
+int main(int argc, char **argv)
+{
+	int width = 0, height = 0;
 	if(argc  >  1)
 	{
 		//test if hte player wants to create a level
@@ -45,35 +78,8 @@ int main(int argc, char **argv)
 			}
 			else
 			{
-				if(!strstr("/", argv[1]))
-				{
-					strcat(argv[1], "/");
-				}
-
-					directory = opendir(argv[1]);
-					if(directory != NULL)
-					{
-						//circle through .slider files
-						while ((fileInDir = readdir(directory)) != NULL)
-						{
-							if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
-							{
-								strcpy(path, argv[1]);
-								strcat(path, fileInDir->d_name);
-									//printf("%s\n",path);
-
-									//TODO: add return type to Play, for errors
-									Play(path);
-							}
-						}
-						closedir(directory);
-					}
-					else
-					{
-						perror("");
-					}
+					loadDir(argv);
 			}
-
 		}
 		return 0;
 	}
