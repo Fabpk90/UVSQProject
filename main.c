@@ -23,30 +23,28 @@ void loadDir(char* argv[])
 	{
 		strcat(argv[1], "/");
 	}
-
-		directory = opendir(argv[1]);
-		if(directory != NULL)
+	directory = opendir(argv[1]);
+	if(directory != NULL)
+	{
+		//circle through .slider files
+		while ((fileInDir = readdir(directory)) != NULL)
 		{
-			//circle through .slider files
-			while ((fileInDir = readdir(directory)) != NULL)
+			if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
 			{
-				if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
-				{
-					strcpy(path, argv[1]);
-					strcat(path, fileInDir->d_name);
-						//printf("%s\n",path);
-
-						//TODO: add return type to Play, for errors
-						Play(path);
-				}
+				strcpy(path, argv[1]);
+				strcat(path, fileInDir->d_name);
+					//printf("%s\n",path);
+					//TODO: add return type to Play, for errors
+					Play(path);
 			}
-			closedir(directory);
-			free(fileInDir);
 		}
-		else
-		{
-			perror("");
-		}
+		closedir(directory);
+		free(fileInDir);
+	}
+	else
+	{
+		perror("");
+	}
 }
 
 int main(int argc, char **argv)
@@ -70,7 +68,7 @@ int main(int argc, char **argv)
 					exit(ERROR_ARGUMENTS);
 				}
 		}
-		else if(argc == 2) //wants to play, first test if level else test if dir
+		else if(argc == 2) //wants to play, first, test if level else test if dir
 		{
 			if(strstr(argv[1], ".slider"))
 			{
@@ -88,6 +86,5 @@ int main(int argc, char **argv)
 		printf("Nombres d'arguments invalides\n");
 		exit(ERROR_ARGUMENTS);
 	}
-
 	return 0;
 }
