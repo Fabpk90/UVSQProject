@@ -54,5 +54,5 @@ zipit:
 	rm -rf ../Release
 
 clean:
-	rm -rf *.o
+	rm -rf obj/*.o
 	rm -rf Slider
