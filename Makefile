@@ -1,7 +1,15 @@
-name=SantoroFabrizio
+name=Santoro_Fabrizio
 compileFlags=-c -g -Wall `sdl-config --cflags`
 
-all: runGame
+test: readMe clean releaseMode compile runGame
+
+releaseMode:
+	compileFlags=-c -g `sdl-config --cflags`
+
+all: readMe runGame
+
+readMe:
+	echo | cat "readMe.txt"
 
 runGame: compile
 	./Slider level/
@@ -32,7 +40,6 @@ editorController.o: Controller/editorController.c
 #	gcc -o NomDuFichier.o -c `sdl-config --cflags` NomDuFichier.c
 # Penser à ajouter le fichier aussi au main (dépendance), si include du .h
 
-
 #Penser à add un truc qui remplace "uvsqgraphics" en <> et enlever uvsqcouleur
 
 codingTime:
@@ -42,17 +49,19 @@ openSdl:
 	atom `sdl-config --cflags`
 
 zipit:
-	rm -rf ../$(name).zip
-	mkdir ../Release
-	cp -r ../UVSQProject ../Release
-	cd ../Release
+	rm -rf $(name).zip
+	mkdir Release
+	cp -r ../UVSQProject Release
+	cd Release
 	ls -a
-	rm -rf ../Release/.git
+	rm -rf /Release/.git
 	indent -kr *.h
 	indent -kr *.c
+	sed -i 's/"uvsqgraphics.h"/<uvsqgraphics.h>/g' main.c
 	zip -r $(name).zip ../Release
 	rm -rf ../Release
 
 clean:
 	rm -rf *.o
+	rm -rf obj/*.o
 	rm -rf Slider
