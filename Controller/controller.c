@@ -89,7 +89,7 @@ void loadWalls(Slider *slider, FILE* level)
     slider->walls = malloc(slider->nbWalls * sizeof(Wall));
     for (i = 0; i < slider->nbWalls; i++)
     {
-      valRead = fscanf(level, "%d %d %d\n", &slider->walls[i].position.x,&slider->walls[i].position.y,  &slider->walls[i].direction);
+      valRead = fscanf(level, "%d %d %d\n", &slider->walls[i].position.x,&slider->walls[i].position.y,  &(slider->walls[i]).direction);
       if(valRead == 3)
       {
         slider->walls[i].direction /= 3;
