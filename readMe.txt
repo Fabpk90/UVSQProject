@@ -1,5 +1,9 @@
-SLiDER
-1.Touches
+SLIDER
+1.Acteurs
+- Cercle vert avec un G -> objectif
+- Cercle bleu avec un P -> joueur
+
+2.Touches
 JEU
 - Fleches pour les mouvements
 - Q pour fermer le programme correctement

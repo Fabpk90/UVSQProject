@@ -1,10 +1,7 @@
 name=Santoro_Fabrizio
 compileFlags=-c -g -Wall `sdl-config --cflags`
 
-test: readMe clean releaseMode compile runGame
-
-releaseMode:
-	compileFlags=-c -g `sdl-config --cflags`
+test: readMe clean runGame
 
 all: readMe runGame
 
@@ -45,19 +42,20 @@ editorController.o: Controller/editorController.c
 codingTime:
 	geany uvsqgraphics.h level0.slider Makefile  main.c Controller/playerController.c Controller/playerController.h Controller/controller.c Controller/controller.h Controller/wallController.c Controller/wallController.h Renderer/renderer.c Renderer/renderer.h Util/*.h
 
-openSdl:
-	atom `sdl-config --cflags`
+testReplace:
+	sed -i -e 's/<uvsqgraphics.h>/"uvsqgraphics.h"/g' **/*
 
 zipit:
 	rm -rf $(name).zip
-	mkdir Release
-	cp -r ../UVSQProject Release
-	cd Release
-	ls -a
-	rm -rf /Release/.git
-	indent -kr *.h
-	indent -kr *.c
-	sed -i 's/"uvsqgraphics.h"/<uvsqgraphics.h>/g' main.c
+	mkdir ../Release
+	cp -r ../UVSQProject ../Release
+	rm -rf ../Release/UVSQProject/.git/
+	rm -rf ../Release/UVSQProject/.gitignore
+	rm -rf ../Release/UVSQProject/Slider
+	rm -rf ../Release/UVSQProject/uvsq*
+	sed -i -e 's/"uvsqgraphics.h"/<uvsqgraphics.h>/g' **/*
+	#indent -kr *.h
+	#indent -kr *.c
 	zip -r $(name).zip ../Release
 	rm -rf ../Release
 

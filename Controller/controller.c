@@ -11,30 +11,60 @@
 void loadWalls(Slider *slider, FILE* level);
 void freePlays(Player *player);
 
+void getRealPosition(POINT *vec);
+void drawHUD(Slider *slider);
+
 void Play(const char *filename)
 {
     Slider *slider = initFromFile(filename);
     uint8_t playerStatus = 0;
     char key = -1;
     init_graphics(slider->resolution.x, slider->resolution.y);
+    affiche_auto_off();
     do
     {
-      affiche_auto_off();
-	    fill_screen(blanc);
-	    drawGame(slider);
-	    playerStatus = movePlayer(slider, get_arrow());
 
-      affiche_all();
       key = get_key();
       if(key == KEY_UNDO)
       {
         undoPlay(&slider->player);
       }
+	    fill_screen(blanc);
+	    drawGame(slider);
+	    playerStatus = movePlayer(slider, get_arrow());
+      drawHUD(slider);
+
+      affiche_all();
+
     }
     while (key != KEY_EXIT && playerStatus == PLAYER_STUCK);	//escape or completed level
   freePlays(&slider->player);
   free(slider->walls);
   free(slider);
+}
+
+void drawHUD(Slider *slider)
+{
+  POINT posRealPlayer, posRealGoal;
+
+  posRealPlayer = slider->player.position;
+  posRealGoal = slider->goalPos;
+
+  getRealPosition(&posRealPlayer);
+  getRealPosition(&posRealGoal);
+
+  aff_pol_centre("P", 24, posRealPlayer, rouge);
+  aff_pol_centre("G", 24, posRealGoal, rouge);
+}
+
+
+void getRealPosition(POINT *vec)
+{
+  vec->x *= CONST_PIXELSCALE;
+  vec->y *= CONST_PIXELSCALE;
+
+  vec->x += CONST_PIXELSCALE / 2;
+  vec->y += CONST_PIXELSCALE / 2;
 }
 
 void freePlays(Player *player)
