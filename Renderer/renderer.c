@@ -14,8 +14,8 @@ void drawGame(Slider * slider)
     drawMap(slider);
     drawWalls(slider->walls, slider->nbWalls);
 
-		drawCircle(slider->goalPos, COLOR_GOAL, CONST_PIXELSCALE / 2);
-    drawCircle(slider->player.position, COLOR_PLAYER, CONST_PIXELSCALE / 2);
+		drawCircle(slider->goalPos, COLOR_GOAL, CONST_PIXELSCALE_HALF);
+    drawCircle(slider->player.position, COLOR_PLAYER, CONST_PIXELSCALE_HALF);
 }
 
 //draws the rows and the cols of the map
@@ -100,8 +100,8 @@ void drawCircle(POINT position, COULEUR color, int radius)
 	position.y *= CONST_PIXELSCALE;
 
 	//center of the case
-	position.x += CONST_PIXELSCALE / 2;
-	position.y += CONST_PIXELSCALE / 2;
+	position.x += CONST_PIXELSCALE_HALF;
+	position.y += CONST_PIXELSCALE_HALF;
 
 	draw_fill_circle(position, radius, color);
 

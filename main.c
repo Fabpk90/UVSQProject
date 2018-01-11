@@ -18,6 +18,7 @@ void loadDir(char *argv[])
     DIR *directory = NULL;
     struct dirent *fileInDir = NULL;
     char path[255];
+    BOOL isQuitting = false;
     //if the dir param need a / at the end
     if (!strstr("/", argv[1]))
     {
@@ -27,19 +28,19 @@ void loadDir(char *argv[])
     if (directory != NULL)
     {
 	     //circle through .slider files
-	      while ((fileInDir = readdir(directory)) != NULL)
+	      while ((fileInDir = readdir(directory)) != NULL && !isQuitting)
         {
 	         if (strcmp(".", fileInDir->d_name) && strstr(fileInDir->d_name, ".slider") != NULL)
            {
 		           strcpy(path, argv[1]);
-		             strcat(path, fileInDir->d_name);
-
-		               //TODO: add return type to Play, for errors
-		                 Play(path);
+		           strcat(path, fileInDir->d_name);
+		           //TODO: add return type to Play, for errors
+		           isQuitting = Play(path);
 	         }
 	      }
+        //free(fileInDir);
 	      closedir(directory);
-	      free(fileInDir);
+
     }
     else
     {
