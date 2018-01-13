@@ -140,11 +140,11 @@ void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
   switch(action)
   {
     case PLACINGGOAL:
-      drawCircle(mousePosition, COLOR_GOAL, CONST_PIXELSCALE / 2 );
+      drawCircle(mousePosition, COLOR_GOAL, CONST_PIXELSCALE_HALF );
     break;
 
     case PLACINGPLAYER:
-      drawCircle(mousePosition, COLOR_PLAYER, CONST_PIXELSCALE / 2 );
+      drawCircle(mousePosition, COLOR_PLAYER, CONST_PIXELSCALE_HALF );
     break;
 
     case PLACINGWALL:
