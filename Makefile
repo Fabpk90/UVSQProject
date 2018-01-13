@@ -1,5 +1,5 @@
 name=Santoro_Fabrizio
-compileFlags=-c -g -Wall `sdl-config --cflags`
+compileFlags=-c -O2 -g -Wall `sdl-config --cflags`
 
 test: readMe clean runGame
 

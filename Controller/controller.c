@@ -102,17 +102,6 @@ void getRealPosition(POINT *vec)
   vec->y += CONST_PIXELSCALE / 2;
 }
 
-void freePlays(Player *player)
-{
-  pilePlays *play = NULL;
-  while(player->plays != NULL)
-  {
-     play = player->plays->next;
-     free(player->plays);
-     player->plays = play;
-  }
-}
-
 Slider* initFromFile(const char *filename)
 {
     FILE *level = fopen(filename, "r");

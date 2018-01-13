@@ -34,8 +34,8 @@ void CreateLevel(int width, int height, const char *filename)
 
 void initSliderPartial(Slider *slider, int width, int height)
 {
-    slider->resolution.x = CONST_PIXELSCALE * width;
-    slider->resolution.y = CONST_PIXELSCALE * height;
+    slider->resolution.x = width >> CONST_PIXELSCALE_BITS;
+    slider->resolution.y = height >> CONST_PIXELSCALE_BITS;
 
     slider->player.position.x = slider->player.position.y = -1;
     slider->goalPos = slider->player.position;
@@ -101,8 +101,8 @@ void handleKeyboard(int key, EditorAction  *action, BOOL *isQuitting, WallDirect
 void handleClick(Slider *slider, EditorAction action, POINT clickPosition, WallDirection wallDir)
 {
   POINT p;
-  p.x = clickPosition.x / CONST_PIXELSCALE;
-  p.y = clickPosition.y / CONST_PIXELSCALE;
+  p.x = clickPosition.x >> CONST_PIXELSCALE_BITS;
+  p.y = clickPosition.y >> CONST_PIXELSCALE_BITS;
 
   switch (action) {
     case PLACINGGOAL:
@@ -134,8 +134,8 @@ void placeWall(POINT position, Slider *slider, WallDirection direction)
 void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
 {
       POINT p2Wall;
-  mousePosition.x /= CONST_PIXELSCALE;
-  mousePosition.y /= CONST_PIXELSCALE;
+  mousePosition.x <<= CONST_PIXELSCALE_BITS;
+  mousePosition.y <<= CONST_PIXELSCALE_BITS;
 
   switch(action)
   {
@@ -148,8 +148,8 @@ void drawMouse(POINT mousePosition, EditorAction action, WallDirection wallDir)
     break;
 
     case PLACINGWALL:
-    mousePosition.x *= CONST_PIXELSCALE;
-    mousePosition.y *= CONST_PIXELSCALE;
+    mousePosition.x >>= CONST_PIXELSCALE_BITS;
+    mousePosition.y >>= CONST_PIXELSCALE_BITS;
       p2Wall = mousePosition;
       drawWall(mousePosition,p2Wall, wallDir);
     break;
@@ -162,7 +162,7 @@ void saveLevel(Slider *slider, const char *filename)
   int i;
   if (level != NULL)
   {
-    fprintf(level, "%d %d\n", slider->resolution.x / CONST_PIXELSCALE, slider->resolution.y / CONST_PIXELSCALE);
+    fprintf(level, "%d %d\n", slider->resolution.x << CONST_PIXELSCALE_BITS, slider->resolution.y << CONST_PIXELSCALE_BITS);
     fprintf(level, "%d %d\n", slider->player.position.x, slider->player.position.y);
     fprintf(level, "%d %d\n", slider->goalPos.x, slider->goalPos.y);
     fprintf(level, "%d\n", slider->nbWalls);

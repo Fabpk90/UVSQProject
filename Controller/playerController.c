@@ -26,8 +26,8 @@ uint8_t movePlayer(Slider * slider, POINT direction)
 	if(direction.x != 0 || direction.y != 0)
 	{
 		//normalisation
-		direction.x /= direction.x == 0 ? 1 : abs(direction.x);
-		direction.y /= direction.y == 0 ? 1 : abs(direction.y);
+		//direction.x /= (direction.x == 0 ? 1 : abs(direction.x));
+		//direction.y /= (direction.y == 0 ? 1 : abs(direction.y));
 
 		//if no destination and the player is trying to move
 		//we need to search for an obstacle
@@ -45,7 +45,6 @@ uint8_t movePlayer(Slider * slider, POINT direction)
 		}
 
 		move(slider, cornerPos);
-		//wall = getBlockingBlock(slider, arrowDirection);
 		affiche_all();
 
 		if(cmpVec(slider->player.position,slider->goalPos))
@@ -173,9 +172,7 @@ Wall* searchForObstacle(Slider *slider, POINT direction)
 				wall = &slider->walls[i];
 			}
 		}
-
 	}
-
 	return wall;
 }
 
@@ -184,8 +181,8 @@ Wall* searchForObstacle(Slider *slider, POINT direction)
 void move(Slider * slider, POINT position)
 {
 		//test if the animation doesn't exceeds the screen
-		if(position.x >= 0 && position.x <= (slider->resolution.x / CONST_PIXELSCALE)
-		&& position.y >= 0 && position.y <= (slider->resolution.y / CONST_PIXELSCALE) )
+		if(position.x >= 0 && position.x <= (slider->resolution.x << CONST_PIXELSCALE_BITS)
+		&& position.y >= 0 && position.y <= (slider->resolution.y << CONST_PIXELSCALE_BITS) )
 		{
 			addPlay(&slider->player);
 			slider->player.position = position;
@@ -244,4 +241,15 @@ ArrowType getArrow(POINT arrowInput)
 	    return ARROWDOWN;
     } else
 	return NONE;
+}
+// deallocate the pile of plays
+void freePlays(Player *player)
+{
+  pilePlays *play = NULL;
+  while(player->plays != NULL)
+  {
+     play = player->plays->next;
+     free(player->plays);
+     player->plays = play;
+  }
 }
