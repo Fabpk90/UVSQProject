@@ -1,9 +1,10 @@
 name=Santoro_Fabrizio
-compileFlags=-c -O2 -g -Wall `sdl-config --cflags`
+compileFlags=-c -w -O2 `sdl-config --cflags`
 
-test: readMe clean runGame
+#compileFlags=-c -O2 -g -Wall `sdl-config --cflags`
 
-all: readMe runGame
+
+test: clean compile readMe runGame
 
 readMe:
 	echo | cat "readMe.txt"
@@ -31,10 +32,10 @@ playerController.o: Controller/playerController.c
 	gcc -o obj/playerController.o $(compileFlags) Controller/playerController.c
 
 editorController.o: Controller/editorController.c
-		gcc -o obj/editorController.o $(compileFlags) Controller/editorController.c
+	gcc -o obj/editorController.o $(compileFlags) Controller/editorController.c
 
 fileManager.o: Util/fileManager.c
-		gcc -o obj/fileManager.o $(compileFlags) Util/fileManager.c
+	gcc -o obj/fileManager.o $(compileFlags) Util/fileManager.c
 
 #NomDuFichier.o: NomDuFichier.c NomDuFichier.h
 #	gcc -o NomDuFichier.o -c `sdl-config --cflags` NomDuFichier.c
@@ -50,17 +51,17 @@ testReplace:
 
 zipit:
 	rm -rf $(name).zip
-	mkdir ../Release
-	cp -r ../UVSQProject ../Release
-	rm -rf ../Release/UVSQProject/.git/
-	rm -rf ../Release/UVSQProject/.gitignore
-	rm -rf ../Release/UVSQProject/Slider
-	rm -rf ../Release/UVSQProject/uvsq*
+	mkdir ../$(name)
+	cp -r ../UVSQProject ../$(name)
+	rm -rf ../$(name)/UVSQProject/.git/
+	rm -rf ../$(name)/UVSQProject/.gitignore
+	rm -rf ../$(name)/UVSQProject/Slider
+	rm -rf ../$(name)/UVSQProject/uvsq*
 	sed -i -e 's/"uvsqgraphics.h"/<uvsqgraphics.h>/g' **/*
 	#indent -kr *.h
 	#indent -kr *.c
-	zip -r $(name).zip ../Release
-	rm -rf ../Release
+	zip -r $(name).zip ../$(name)
+	rm -rf ../$(name)
 
 clean:
 	rm -rf *.o

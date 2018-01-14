@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "uvsqgraphics.h"
+#include <uvsqgraphics.h>
 
 #include "../Util/gridStruct.h"
 #include "../Util/constants.h"

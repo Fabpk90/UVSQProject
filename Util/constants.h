@@ -20,6 +20,7 @@
 #define COLOR_WALL rouge
 
 #define CONST_PIXELSCALE 32
+//put the bits val of the pixelscale here
 #define CONST_PIXELSCALE_BITS 5
 #define CONST_PIXELSCALE_HALF 16 //CONST_PIXELSCALE >> 1
 

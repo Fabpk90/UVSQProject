@@ -15,3 +15,8 @@ EDITEUR
 - W selectionne le placement d'un mur
 - R effectue une rotation du mur en selection
 - S sauvegarde le niveau
+
+PROGRAMMATION
+
+Attention, utilisation intensive des shifts pour les opérations,
+suivre les commentaires pour la modification des constantes
