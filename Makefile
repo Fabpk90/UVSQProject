@@ -10,7 +10,7 @@ readMe:
 	echo | cat "readMe.txt"
 
 runGame: compile
-	./Slider level/
+	./Slider level
 
 runEditor: compile
 	./Slider -c 10 10 level1.slider
@@ -45,23 +45,6 @@ fileManager.o: Util/fileManager.c
 
 codingTime:
 	geany uvsqgraphics.h level0.slider Makefile  main.c Controller/playerController.c Controller/playerController.h Controller/controller.c Controller/controller.h Controller/wallController.c Controller/wallController.h Renderer/renderer.c Renderer/renderer.h Util/*.h
-
-testReplace:
-	sed -i -e 's/<uvsqgraphics.h>/"uvsqgraphics.h"/g' **/*
-
-zipit:
-	rm -rf $(name).zip
-	mkdir ../$(name)
-	cp -r ../UVSQProject ../$(name)
-	rm -rf ../$(name)/UVSQProject/.git/
-	rm -rf ../$(name)/UVSQProject/.gitignore
-	rm -rf ../$(name)/UVSQProject/Slider
-	rm -rf ../$(name)/UVSQProject/uvsq*
-	sed -i -e 's/"uvsqgraphics.h"/<uvsqgraphics.h>/g' **/*
-	#indent -kr *.h
-	#indent -kr *.c
-	zip -r $(name).zip ../$(name)
-	rm -rf ../$(name)
 
 clean:
 	rm -rf *.o

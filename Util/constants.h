@@ -3,8 +3,9 @@
 
 #define ERROR_ARGUMENTS -1
 #define ERROR_CREATING_FILE -2
-#define ERROR_CREATING_WALLS_NB -3
-#define ERROR_CREATING_WALLS -4
+#define ERROR_LOADING_WALLS_NB -3
+#define ERROR_LOADING_WALLS -4
+#define ERROR_LOADING_BASIC_SLIDER -5 //used when the basic info of the slider are corrupted_
 
 #define KEY_EXIT 'Q'
 #define KEY_UNDO 'U'

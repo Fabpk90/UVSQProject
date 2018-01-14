@@ -31,12 +31,10 @@ BOOL Play(const char *filename)
       drawGame(slider);
       drawHUD(slider);
       affiche_all();
-      switch(wait_key_arrow_clic(&key, &arrow, &p))
-      {
+      switch(wait_key_arrow_clic(&key, &arrow, &p)) {
         case EST_FLECHE:
         playerStatus = movePlayer(slider, convertArrowInPoint(arrow));
         break;
-
         case EST_TOUCHE:
         if(key == KEY_UNDO)
           undoPlay(&slider->player);
@@ -47,9 +45,7 @@ BOOL Play(const char *filename)
   freePlays(&slider->player);
   free(slider->walls);
   free(slider);
-
-  if(key == KEY_EXIT)
-    return true;
+  if(key == KEY_EXIT) return true;
   return false;
 }
 
