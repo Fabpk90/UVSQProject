@@ -14,8 +14,8 @@ runGame: compile
 runEditor: compile
 	./Slider -c 10 10 level1.slider
 
-compile: renderer.o controller.o playerController.o main.o editorController.o
-	gcc  -o Slider main.o obj/editorController.o obj/renderer.o obj/controller.o obj/playerController.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
+compile: renderer.o controller.o playerController.o main.o editorController.o fileManager.o
+	gcc  -o Slider main.o obj/editorController.o obj/renderer.o obj/controller.o obj/playerController.o obj/fileManager.o -luvsqgraphics `sdl-config --libs` -lm -lSDL_ttf
 
 #ajouter les headers corrects
 main.o: main.c controller.o
@@ -32,6 +32,9 @@ playerController.o: Controller/playerController.c
 
 editorController.o: Controller/editorController.c
 		gcc -o obj/editorController.o $(compileFlags) Controller/editorController.c
+
+fileManager.o: Util/fileManager.c
+		gcc -o obj/fileManager.o $(compileFlags) Util/fileManager.c
 
 #NomDuFichier.o: NomDuFichier.c NomDuFichier.h
 #	gcc -o NomDuFichier.o -c `sdl-config --cflags` NomDuFichier.c
