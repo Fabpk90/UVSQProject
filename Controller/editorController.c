@@ -84,7 +84,10 @@ void handleKeyboard(int key, EditorAction  *action, BOOL *isQuitting, WallDirect
       *isQuitting = true;
     break;
     case KEY_EDITOR_SAVE:
+    if(slider->goalPos.x != -1 && slider->goalPos.y != -1 && slider->player.position.x != -1 && slider->player.position.y != -1)
       saveLevel(slider, filename);
+      else
+      printf("Placer au moins le joueur et l'objectif avant de sauvegarder le niveau\n");
     break;
   }
 }
@@ -150,7 +153,7 @@ void saveLevel(Slider *slider, const char *filename)
   FILE *level = fopen(filename, "w+");
   int i;
   if (level != NULL) {
-    fprintf(level, "%d %d\n", slider->resolution.x << CONST_PIXELSCALE_BITS, slider->resolution.y << CONST_PIXELSCALE_BITS);
+    fprintf(level, "%d %d\n", slider->resolution.x >> CONST_PIXELSCALE_BITS, slider->resolution.y >> CONST_PIXELSCALE_BITS);
     fprintf(level, "%d %d\n", slider->player.position.x, slider->player.position.y);
     fprintf(level, "%d %d\n", slider->goalPos.x, slider->goalPos.y);
     fprintf(level, "%d\n", slider->nbWalls);

@@ -32,6 +32,7 @@ void loadDir(char *argv[])
                 strcat(path, fileInDir->d_name);
                 //TODO: add return type to Play, for errors
                 isQuitting = Play(path);
+                SDL_Quit();
             }
         }
         closedir(directory);

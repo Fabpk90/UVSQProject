@@ -12,45 +12,34 @@ void move(Slider * slider, POINT position);
 
 POINT getCorrectPosition(Wall *wall, POINT direction);
 POINT getCornerScreen(POINT direction, Slider *slider);
+BOOL checkIfGoThroughGoal(slider, cornerPos);
 
-// pas de récursif ici, la mémoire serait gachée
-// iteratif, moche, mais niveau mémoire c'est mieux
-
+//move the player accodring to the movement and obstacles
 uint8_t movePlayer(Slider * slider, POINT direction)
 {
 	Wall *wall = NULL;
-
-	POINT cornerPos;
+	BOOL isGoneThroughGoal = false;
 	cornerPos.x = cornerPos.y = 1;
-
 	if(direction.x != 0 || direction.y != 0)
 	{
-		//normalisation
-		//direction.x /= (direction.x == 0 ? 1 : abs(direction.x));
-		//direction.y /= (direction.y == 0 ? 1 : abs(direction.y));
-
 		//if no destination and the player is trying to move
 		//we need to search for an obstacle
 		wall = searchForObstacle(slider, direction);
-
 		if(wall != NULL)
 		{
 			cornerPos = getCorrectPosition(wall, direction);
 		}
-		else
+		else //if there is no wall, the player need to go to a corner of the screen
 		{
-			//if there is no wall, the player need to go to a corner of the screen
+
 			cornerPos = getCornerScreen(direction, slider);
 			addVec(cornerPos, slider->player.position);
 		}
-
 		move(slider, cornerPos);
 		affiche_all();
-
 		if(cmpVec(slider->player.position,slider->goalPos))
 			return PLAYER_VICTORY;
 	}
-
 		return PLAYER_STUCK;
 }
 
@@ -176,7 +165,7 @@ Wall* searchForObstacle(Slider *slider, POINT direction)
 	return wall;
 }
 
-// TODO: animation
+// TODO: animation, handle non cornered Goal
 // move step by step and stops when cannot move
 void move(Slider * slider, POINT position)
 {

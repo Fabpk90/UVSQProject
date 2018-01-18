@@ -80,18 +80,15 @@ void updateWallFromDirection(POINT * p1, POINT * p2,
 		    case WALLDOWN:
 					p2->x += CONST_PIXELSCALE;
 				break;
-
 		    case WALLLEFT:
 					p2->y += CONST_PIXELSCALE;
 				break;
-
 		    case WALLRIGHT:
 					p2->x += CONST_PIXELSCALE;
 					p1->x = p2->x;
 
 					p2->y += CONST_PIXELSCALE;
 				break;
-
 		    case WALLUP:
 					p2->y += CONST_PIXELSCALE;
 					p1->y = p2->y;
